@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.chat.chatRoom.service;
 
+import com.ll.hereispaw.domain.chat.chatRoom.dto.ChatRoomDto;
 import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.domain.chat.chatRoom.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,10 +29,24 @@ public class ChatRoomService {
     public ChatRoom viewRoom(Long id){
         Optional<ChatRoom> chatRoom = this.chatRoomRepository.findById(id);
         if(chatRoom.isPresent()){
+           ChatRoom chatRoom1 = chatRoom.get();
+
+           ChatRoomDto ChatRoomDto = new ChatRoomDto(chatRoom1);
+
             return chatRoom.get();
         }else {
             throw new RuntimeException("error ChatService viewRoom");
         }
+    }
+
+    //채팅방 생성
+    public ChatRoom createRoom(){
+        ChatRoom chatRoom = ChatRoom.builder()
+                .createdDate(LocalDateTime.now())
+                //.roomState()
+                .build();
+        chatRoomRepository.save(chatRoom);
+        return chatRoom;
     }
 
 }
