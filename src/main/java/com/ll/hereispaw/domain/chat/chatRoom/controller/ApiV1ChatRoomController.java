@@ -27,11 +27,4 @@ public class ApiV1ChatRoomController {
         ChatRoom chatRoom =this.chatRoomService.viewRoom(chatRoomId);
         return chatRoom;
     }
-
-    //채팅방 생성
-    @PostMapping("/create")
-    public ChatRoom create(){
-        ChatRoom chatRoom = chatRoomService.create();
-        return chatRoom;
-    }
 }

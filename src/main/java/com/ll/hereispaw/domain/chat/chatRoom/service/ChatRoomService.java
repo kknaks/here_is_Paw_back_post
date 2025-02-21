@@ -33,8 +33,4 @@ public class ChatRoomService {
         }
     }
 
-    //채팅방 생성
-    public ChatRoom create(){
-
-    }
 }
