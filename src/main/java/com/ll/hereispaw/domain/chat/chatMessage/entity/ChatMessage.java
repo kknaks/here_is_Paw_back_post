@@ -1,24 +1,25 @@
 package com.ll.hereispaw.domain.chat.chatMessage.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.global.jpa.BaseEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-@ToString(callSuper = true)
+@ToString
 public class ChatMessage extends BaseEntity {
 
-    @Column(nullable = false)
-    @NotNull
+    @JsonBackReference
+    @ManyToOne
+    private ChatRoom chatRoom;
+
     private String content;
-
-
 }
