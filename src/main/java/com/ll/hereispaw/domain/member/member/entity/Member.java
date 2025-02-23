@@ -1,8 +1,11 @@
 package com.ll.hereispaw.domain.member.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,9 +33,9 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 50)
     private String apiKey;
 
-    public String getName() {
-        return nickname;
-    }
+    @OneToMany
+    @JsonManagedReference
+    private List<MyPet> myPets;
 
     public boolean isAdmin() {
         return "admin".equals(username);

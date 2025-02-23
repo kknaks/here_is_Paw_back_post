@@ -39,6 +39,7 @@ public class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRe
         if (redirectUrl != null && !redirectUrl.isEmpty()) {
             additionalParameters.put("state", redirectUrl);
         }
+
         return OAuth2AuthorizationRequest.from(authorizationRequest)
                 .additionalParameters(additionalParameters)
                 .state(redirectUrl)

@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.member.member.service;
 
+import com.ll.hereispaw.domain.member.member.dto.MemberInfoDto;
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.member.member.repository.MemberRepository;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,10 @@ public class MemberService {
 
     public long count() {
         return memberRepository.count();
+    }
+
+    public MemberInfoDto me(Member loginUser) {
+        return new MemberInfoDto(loginUser);
     }
 
     public Member singup(String username, String password, String nickname) {

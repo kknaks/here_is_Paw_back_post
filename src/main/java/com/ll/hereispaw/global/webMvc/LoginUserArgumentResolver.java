@@ -36,7 +36,13 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {
-      log.debug("없음");
+      return null;
+    }
+
+    // Principal 타입 체크 추가
+    Object principal = authentication.getPrincipal();
+    if (!(principal instanceof SecurityUser)) {
+      return null;
     }
 
     SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
