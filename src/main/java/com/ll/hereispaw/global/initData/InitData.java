@@ -37,9 +37,9 @@ public class InitData {
             @Override
             public void run (ApplicationArguments args) {
                 if (memberService.count() > 0)  return;
-                Member member1 = memberService.join("user1", "1234", "유저1").getData();
-                Member member2 =memberService.join("user1", "1234", "유저1").getData();
-                Member member3 =memberService.join("user1", "1234", "유저1").getData();
+                Member member1 = memberService.signup("user1", "1234", "유저1");
+                Member member2 =memberService.signup("user2", "1234", "유저1");
+                Member member3 =memberService.signup("user3", "1234", "유저1");
 
                 Author author1 = missingService.of(member1);
                 Author author2 = missingService.of(member2);
