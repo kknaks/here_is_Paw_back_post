@@ -4,7 +4,6 @@ import com.ll.hereispaw.domain.missing.missing.dto.request.MissingRequestDTO;
 import com.ll.hereispaw.domain.missing.missing.dto.response.MissingDTO;
 import com.ll.hereispaw.domain.missing.missing.service.MissingService;
 import com.ll.hereispaw.global.globalDto.GlobalResponse;
-import com.ll.hereispaw.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
