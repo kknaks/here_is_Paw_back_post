@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.2"
+    id("org.springframework.boot") version "3.4.1"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -46,6 +46,14 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     // OAuth2
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    //S3 bucket
+    implementation(platform("software.amazon.awssdk:bom:2.24.0"))
+    implementation("software.amazon.awssdk:s3")
+
+    //swegger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+
 }
 
 tasks.withType<Test> {

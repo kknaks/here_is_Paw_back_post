@@ -130,4 +130,7 @@ public class MemberService {
         return new LoginResponse(new MemberInfoDto(member), member.getApiKey(), token);
     }
 
+    public void update(Member member) {
+        memberRepository.save(member);
+    }
 }
