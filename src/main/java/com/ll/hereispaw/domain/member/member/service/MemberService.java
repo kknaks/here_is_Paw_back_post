@@ -1,11 +1,17 @@
 package com.ll.hereispaw.domain.member.member.service;
 
-import com.ll.hereispaw.domain.member.member.dto.MemberInfoDto;
+import com.ll.hereispaw.domain.member.member.dto.request.LoginRequest;
+import com.ll.hereispaw.domain.member.member.dto.request.SignupRequest;
+import com.ll.hereispaw.domain.member.member.dto.response.LoginResponse;
+import com.ll.hereispaw.domain.member.member.dto.response.MemberInfoDto;
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.member.member.repository.MemberRepository;
+import com.ll.hereispaw.global.rq.Rq;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -17,6 +23,8 @@ import java.util.UUID;
 public class MemberService {
     private final AuthTokenService authTokenService;
     private final MemberRepository memberRepository;
+    private final Rq rq;
+    private final PasswordEncoder passwordEncoder;
 
     public long count() {
         return memberRepository.count();
@@ -26,7 +34,7 @@ public class MemberService {
         return new MemberInfoDto(loginUser);
     }
 
-    public Member singup(String username, String password, String nickname) {
+    public Member signup(String username, String password, String nickname) {
         memberRepository
                 .findByUsername(username)
                 .ifPresent(user -> {
@@ -37,6 +45,25 @@ public class MemberService {
                 .username(username)
                 .password(password)
                 .nickname(nickname)
+                .apiKey(UUID.randomUUID().toString())
+                .build();
+
+        return memberRepository.save(member);
+    }
+
+    public Member signup(SignupRequest signupRq) {
+        String username = signupRq.username();
+
+        memberRepository
+                .findByUsername(username)
+                .ifPresent(user -> {
+                    throw new ServiceException("해당 username은 이미 사용중입니다.");
+                });
+
+        Member member = Member.builder()
+                .username(username)
+                .password(passwordEncoder.encode(signupRq.password()))
+                .nickname(signupRq.nickname())
                 .apiKey(UUID.randomUUID().toString())
                 .build();
 
@@ -88,6 +115,19 @@ public class MemberService {
             modify(member, nickname);
             return member;
         }
-        return singup(username, "", nickname);
+        return signup(username, "", nickname);
     }
+
+    public LoginResponse login(LoginRequest loginRq) {
+        Member member = memberRepository.findByUsername(loginRq.username())
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저는 없습니다."));
+
+        if (passwordEncoder.matches(member.getPassword(), loginRq.password()))
+            throw new ServiceException("비밀번호가 일치하지 않습니다.");
+
+        String token = rq.makeAuthCookies(member);
+
+        return new LoginResponse(new MemberInfoDto(member), member.getApiKey(), token);
+    }
+
 }

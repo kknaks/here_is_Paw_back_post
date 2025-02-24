@@ -39,7 +39,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
       return null;
     }
 
-    // Principal 타입 체크 추가
     Object principal = authentication.getPrincipal();
     if (!(principal instanceof SecurityUser)) {
       return null;
@@ -47,6 +46,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
     String username = securityUser.getUsername();
+
 
     return memberService.findByUsername(username).get();
   }

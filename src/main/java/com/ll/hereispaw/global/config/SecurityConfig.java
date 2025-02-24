@@ -3,6 +3,7 @@ package com.ll.hereispaw.global.config;
 import com.ll.hereispaw.global.security.CustomAuthenticationFilter;
 import com.ll.hereispaw.global.security.CustomAuthorizationRequestResolver;
 import com.ll.hereispaw.global.security.CustomOAuth2AuthenticationSuccessHandler;
+import com.ll.hereispaw.global.security.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -41,7 +42,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain baseSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain baseSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
+
         http
 //                .securityMatcher("")
                 .authorizeHttpRequests(authorizeRequests ->
@@ -49,6 +51,8 @@ public class SecurityConfig {
                                 .requestMatchers("/h2-console/**")
                                 .permitAll()
                                 .requestMatchers("/api/v1/members/me").permitAll()
+                                .requestMatchers("/api/v1/members/signup").permitAll()
+                                .requestMatchers("/api/v1/members/login").permitAll()
                                 .requestMatchers("/api/*/**")
                                 .authenticated()
                                 .anyRequest()
@@ -68,16 +72,12 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagement) -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .formLogin(
-                        AbstractHttpConfigurer::disable
-                )
                 .oauth2Login(
                         oauth2Login -> oauth2Login
                                 .successHandler(customOAuth2AuthenticationSuccessHandler)
                                 .authorizationEndpoint(
-                                        authorizationEndpoint ->
-                                                authorizationEndpoint
-                                                        .authorizationRequestResolver(customAuthorizationRequestResolver)
+                                        authorizationEndpoint -> authorizationEndpoint
+                                                .authorizationRequestResolver(customAuthorizationRequestResolver)
                                 )
                 )
                 .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
