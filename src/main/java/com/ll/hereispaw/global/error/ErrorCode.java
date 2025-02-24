@@ -41,9 +41,12 @@ public enum ErrorCode {
 
     // myPet
     MY_PET_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 반려견을 찾을 수 없습니다."),
+
     //S3
     S3_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드 중 오류가 발생했습니다.");
-
+  
+    // missing
+    MISSING_NOT_FOUND(HttpStatus.NOT_FOUND, "신고글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
