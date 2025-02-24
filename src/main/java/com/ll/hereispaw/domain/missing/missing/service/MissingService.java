@@ -7,6 +7,9 @@ import com.ll.hereispaw.domain.missing.missing.dto.response.MissingDTO;
 import com.ll.hereispaw.domain.missing.missing.entity.Missing;
 import com.ll.hereispaw.domain.missing.missing.repository.MissingRepository;
 import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.global.error.ErrorCode;
+import com.ll.hereispaw.global.error.ErrorResponse;
+import com.ll.hereispaw.global.exception.CustomException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +66,7 @@ public class MissingService {
 
         for (Missing missing : missings) {
 
-            Author author = authorRepository.findById(missing.getAuthor().getId()).orElse(null);
+            Author author = authorRepository.findById(missing.getAuthor().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
             missingDTOS.add(
                     MissingDTO.builder()
@@ -91,14 +94,14 @@ public class MissingService {
 
     public MissingDTO findById(Long missingId) {
         Missing missing = missingRepository.findById(missingId)
-                .orElseThrow(() -> new RuntimeException("Missing not found with id: " + missingId));
+                .orElseThrow(() -> new CustomException(ErrorCode.MISSING_NOT_FOUND));
 
         return new MissingDTO(missing);
     }
 
     public MissingDTO update(MissingRequestDTO missingRequestDTO, Long missingId) {
 
-        Missing missing = missingRepository.findById(missingId).orElse(null);
+        Missing missing = missingRepository.findById(missingId).orElseThrow(() -> new CustomException(ErrorCode.MISSING_NOT_FOUND));
 
         log.debug("missing : {}", missing);
         log.debug("missing.name : {}", missing.getName());
@@ -128,7 +131,7 @@ public class MissingService {
     }
 
     public String delete(Long missingId) {
-        Missing missing = missingRepository.findById(missingId).orElse(null);
+        Missing missing = missingRepository.findById(missingId).orElseThrow(() -> new CustomException(ErrorCode.MISSING_NOT_FOUND));
 
         missingRepository.delete(missing);
 
