@@ -1,9 +1,13 @@
 package com.ll.hereispaw.domain.member.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -11,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Entity
 @Getter
 @Setter
@@ -21,7 +26,6 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 30)
     private String username;
 
-    @Column(length = 50)
     private String password;
 
     @Column(length = 30)
@@ -30,12 +34,16 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 50)
     private String apiKey;
 
-    public String getName() {
-        return nickname;
-    }
+    @OneToMany(mappedBy = "member")
+    @JsonManagedReference
+    private List<MyPet> myPets;
 
     public boolean isAdmin() {
-        return "admin".equals(username);
+        return "admin".startsWith(username);
+    }
+
+    public boolean isManager() {
+        return "manager".startsWith(username);
     }
 
     public boolean matchPassword(String password) {
@@ -60,6 +68,9 @@ public class Member extends BaseEntity {
 
         if (isAdmin())
             authorities.add("ROLE_ADMIN");
+
+        if (isManager())
+            authorities.add("ROLE_MANAGER");
 
         return authorities;
     }
