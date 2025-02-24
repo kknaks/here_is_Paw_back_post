@@ -1,3 +1,5 @@
+server:
+  port: 8090
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -13,3 +15,8 @@ logging:
   level:
     root: info
     com.ll.hereispaw : debug
+custom:
+  dev:
+    cookieDomain: localhost
+    frontUrl: "http://${custom.dev.cookieDomain}:5173"
+    backUrl: "http://${custom.dev.cookieDomain}:${server.port}"
