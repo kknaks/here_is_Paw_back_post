@@ -6,17 +6,36 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MissingRequestDTO {
+    /**
+     * 이름, 견종, 유기견 이미지, 지역, 좌표
+     * 색상, 동물 등록 번호, 성별, 중성화 유무, 나이, 실종 날짜, 기타(특징), 사례금
+     */
+    // 필수값
+    @NotBlank(message = "이름은 필수입력입니다.")
+    private String name;
+    @NotBlank(message = "견종은 필수입력입니다.")
+    private String breed;
+    @NotBlank(message = "위치는 필수입력입니다.")
+    private String geo;
+    private String location;
+
+    private String color;
+    private String serialNumber;
+    private boolean gender;
+    private boolean neutered;
+    private int age;
+    private Timestamp lostDate;
+    private String etc;
+    private int reward;
+    private int state;
 
     private Author author;
-
-    @NotBlank(message = "title은 필수입력입니다.")
-    private String title;
-    @NotBlank(message = "content는 필수입력입니다.")
-    private String content;
-
-
+//    @NotBlank(message = "사진은 필수입력입니다.")
+    private String pathUrl;
 }

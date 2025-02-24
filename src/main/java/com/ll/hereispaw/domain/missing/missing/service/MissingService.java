@@ -9,13 +9,13 @@ import com.ll.hereispaw.domain.missing.missing.repository.MissingRepository;
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,9 +32,21 @@ public class MissingService {
 
         Missing missing = missingRepository.save(
                 Missing.builder()
+                        .name(missingRequestDto.getName())
+                        .breed(missingRequestDto.getBreed())
+                        .geo(missingRequestDto.getGeo())
+                        .location(missingRequestDto.getLocation())
+                        .color(missingRequestDto.getColor())
+                        .serialNumber(missingRequestDto.getSerialNumber())
+                        .gender(missingRequestDto.isGender())
+                        .neutered(missingRequestDto.isNeutered())
+                        .age(missingRequestDto.getAge())
+                        .lostDate(missingRequestDto.getLostDate())
+                        .etc(missingRequestDto.getEtc())
+                        .reward(missingRequestDto.getReward())
+                        .state(missingRequestDto.getState())
+                        .pathUrl(missingRequestDto.getPathUrl())
                         .author(missingRequestDto.getAuthor())
-                        .title(missingRequestDto.getTitle())
-                        .content(missingRequestDto.getContent())
                         .build()
         );
 
@@ -55,9 +67,22 @@ public class MissingService {
 
             missingDTOS.add(
                     MissingDTO.builder()
-                        .nickname(author.getNickname())
-                        .title(missing.getTitle())
-                        .content(missing.getContent()).build()
+                            .name(missing.getName())
+                            .breed(missing.getBreed())
+                            .geo(missing.getGeo())
+                            .location(missing.getLocation())
+                            .color(missing.getColor())
+                            .serialNumber(missing.getSerialNumber())
+                            .gender(missing.isGender())
+                            .neutered(missing.isNeutered())
+                            .age(missing.getAge())
+                            .lostDate(missing.getLostDate())
+                            .etc(missing.getEtc())
+                            .reward(missing.getReward())
+                            .state(missing.getState())
+                            .pathUrl(missing.getPathUrl())
+                            .nickname(author.getNickname())
+                            .build()
             );
         }
 
@@ -75,11 +100,26 @@ public class MissingService {
 
         Missing missing = missingRepository.findById(missingId).orElse(null);
 
+        log.debug("missing : {}", missing);
+        log.debug("missing.name : {}", missing.getName());
+
         // 수정 시 유저 확인
         // - 코드 작성해야함.
 
-        missing.setTitle(missingRequestDTO.getTitle());
-        missing.setContent(missingRequestDTO.getContent());
+        missing.setName(missingRequestDTO.getName());
+        missing.setBreed(missingRequestDTO.getBreed());
+        missing.setGeo(missingRequestDTO.getGeo());
+        missing.setLocation(missingRequestDTO.getLocation());
+        missing.setColor(missingRequestDTO.getColor());
+        missing.setSerialNumber(missingRequestDTO.getSerialNumber());
+        missing.setGender(missingRequestDTO.isGender());
+        missing.setNeutered(missingRequestDTO.isNeutered());
+        missing.setAge(missingRequestDTO.getAge());
+        missing.setLostDate(missingRequestDTO.getLostDate());
+        missing.setEtc(missingRequestDTO.getEtc());
+        missing.setState(missingRequestDTO.getState());
+        missing.setReward(missingRequestDTO.getReward());
+        missing.setPathUrl(missingRequestDTO.getPathUrl());
 
         missingRepository.save(missing);
 
