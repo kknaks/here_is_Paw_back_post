@@ -116,18 +116,12 @@ public class PaymentController {
     }
 
     // 결제 요청
-    @GetMapping("/pay/{missingId}")
-    public ResponseEntity<?> pay(@PathVariable("missingId") Long missingId) {
+    @GetMapping("/pay/{amount}")
+    public ResponseEntity<?> pay(@PathVariable("amount") Integer amount) {
         try {
-//            Missing missing = missingService.findById(missingId);
-//            if (missing == null) {
-//                return ResponseEntity.notFound().build();
-//            }
-
             // 프론트엔드 체크아웃 페이지로 리다이렉트
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://localhost:5173/checkout?missingId=" + missingId));
-
+            headers.setLocation(URI.create("http://localhost:5173/checkout?amount=" + amount));
             return new ResponseEntity<>(headers, HttpStatus.FOUND);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
