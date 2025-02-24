@@ -38,6 +38,8 @@ public class Member extends BaseEntity {
     @JsonManagedReference
     private List<MyPet> myPets;
 
+    private String avatar;
+
     public boolean isAdmin() {
         return "admin".startsWith(username);
     }

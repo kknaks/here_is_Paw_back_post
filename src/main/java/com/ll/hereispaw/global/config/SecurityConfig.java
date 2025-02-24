@@ -48,8 +48,8 @@ public class SecurityConfig {
 //                .securityMatcher("")
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/h2-console/**")
-                                .permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/swagger-ui/index.html").permitAll()
                                 .requestMatchers("/api/v1/members/me").permitAll()
                                 .requestMatchers("/api/v1/members/signup").permitAll()
                                 .requestMatchers("/api/v1/members/login").permitAll()
