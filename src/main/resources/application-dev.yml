@@ -8,3 +8,8 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false # OSIV 설정 끄기
+
+logging:
+  level:
+    root: info
+    com.ll.hereispaw : debug
