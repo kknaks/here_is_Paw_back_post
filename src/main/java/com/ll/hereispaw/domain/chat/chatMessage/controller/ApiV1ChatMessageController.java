@@ -5,6 +5,7 @@ import com.ll.hereispaw.domain.chat.chatMessage.dto.CreateChatMessage;
 import com.ll.hereispaw.domain.chat.chatMessage.entity.ChatMessage;
 import com.ll.hereispaw.domain.chat.chatMessage.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class ApiV1ChatMessageController {
 
     private final ChatMessageService chatMessageService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     //메세지 생성
     @PostMapping("")
     public ChatMessageDto writeMessage(@PathVariable("chatRoom-id") Long chatRoomId, @RequestBody CreateChatMessage createChatMessage){
         ChatMessage chatMessage = this.chatMessageService.writeMessage(chatRoomId, createChatMessage.getContent());
         ChatMessageDto messages = new ChatMessageDto(chatMessage);
+
+        simpMessagingTemplate.convertAndSend("/topic/api/v1/chat/{chatRoom-id}/messages",messages);
+
         return messages;
     }
 }
