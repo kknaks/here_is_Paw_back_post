@@ -21,8 +21,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-// 메모
-// - CORS 설정 추후 변경(합의)
+// TODO: CORD 설정 어떻게?
+// TODO: response 객체 관련 수정해야 함.
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
