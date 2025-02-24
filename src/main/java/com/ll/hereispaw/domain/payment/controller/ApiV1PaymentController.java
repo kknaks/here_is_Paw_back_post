@@ -25,7 +25,7 @@ import java.util.Base64;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
-public class PaymentController {
+public class ApiV1PaymentController {
     //private final MissingService missingService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final JSONParser parser = new JSONParser();
