@@ -35,6 +35,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    //validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     // JSON Simple
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
 }
