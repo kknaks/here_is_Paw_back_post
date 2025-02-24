@@ -35,6 +35,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    //validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     // SpringBoot Security
     implementation("org.springframework.boot:spring-boot-starter-security")
     // JWT
@@ -43,8 +46,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     // OAuth2
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    // Valid
-    implementation("org.springframework.boot:spring-boot-starter-validation")
 }
 
 tasks.withType<Test> {
