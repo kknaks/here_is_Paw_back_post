@@ -23,7 +23,7 @@ public class MyPetService {
     public List<MyPetResponseDto> getMyPets(Member loginUser) {
         List<MyPet> myPets = myPetRepository.findAllByMember(loginUser);
 
-        return Objects.requireNonNull(myPets).stream()
+        return myPets.stream()
                 .map(MyPetResponseDto::of)
                 .toList();
     }
@@ -37,9 +37,9 @@ public class MyPetService {
                 .breed(myPetRequest.getBreed())
                 .color(myPetRequest.getColor())
                 .serialNumber(myPetRequest.getSerialNumber())
-                .gender(myPetRequest.getGender())
+                .gender(myPetRequest.getGender() != null ? myPetRequest.getGender() : 0)
                 .neutered(myPetRequest.isNeutered())
-                .age(myPetRequest.getAge())
+                .age(myPetRequest.getAge() != null ? myPetRequest.getAge() : 0)
                 .etc(myPetRequest.getEtc())
                 .build();
 

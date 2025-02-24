@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/members/me").permitAll()
                                 .requestMatchers("/api/v1/members/signup").permitAll()
                                 .requestMatchers("/api/v1/members/login").permitAll()
+                                .requestMatchers("/api/v1/members/logout").permitAll()
                                 .requestMatchers("/api/*/**")
                                 .authenticated()
                                 .anyRequest()

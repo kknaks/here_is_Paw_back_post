@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 50)
     private String apiKey;
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     @JsonManagedReference
     private List<MyPet> myPets;
 

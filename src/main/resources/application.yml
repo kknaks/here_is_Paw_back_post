@@ -7,11 +7,6 @@ spring:
   profiles:
     active: dev
     include: secret
-  datasource:
-    url: jdbc:postgresql://localhost:5432/paw_db
-    username: myuser
-    password: 1234
-    driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

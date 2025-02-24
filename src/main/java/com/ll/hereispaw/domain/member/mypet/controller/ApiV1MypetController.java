@@ -3,6 +3,7 @@ package com.ll.hereispaw.domain.member.mypet.controller;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.member.mypet.dto.request.MyPetRequest;
+import com.ll.hereispaw.domain.member.mypet.dto.response.MyPetResponseDto;
 import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.domain.member.mypet.service.MyPetService;
 import com.ll.hereispaw.global.webMvc.LoginUser;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,7 +32,9 @@ public class ApiV1MypetController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 하지 않은 사용자입니다.");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(myPetService.getMyPets(loginUser));
+        List<MyPetResponseDto> myPets = myPetService.getMyPets(loginUser);
+
+        return ResponseEntity.status(HttpStatus.OK).body(myPets);
     }
 
     // 내 반려견 등록

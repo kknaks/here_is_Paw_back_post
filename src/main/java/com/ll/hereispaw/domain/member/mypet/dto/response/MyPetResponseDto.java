@@ -1,15 +1,14 @@
 package com.ll.hereispaw.domain.member.mypet.dto.response;
 
 import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
-import jakarta.persistence.Column;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
+@NoArgsConstructor
 public class MyPetResponseDto {
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String breed;
 
 //    @Column(nullable = false)

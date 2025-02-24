@@ -3,9 +3,7 @@ package com.ll.hereispaw.domain.member.mypet.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.global.jpa.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -16,7 +14,8 @@ import lombok.*;
 @AllArgsConstructor
 public class MyPet extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;
 
