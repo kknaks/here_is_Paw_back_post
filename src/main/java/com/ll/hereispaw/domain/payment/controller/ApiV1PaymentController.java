@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.payment.controller;
 
+import com.ll.hereispaw.domain.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,13 +21,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-// 1. CORS 설정 추후 변경(상호합의)
-// 2. Missing 관련 도메인 병합 후 로직 확인 필요 - Missing 부재로 인한 코드는 주석 처리함.
+// 메모
+// - CORS 설정 추후 변경(합의)
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 public class ApiV1PaymentController {
-    //private final MissingService missingService;
+    private final PaymentService paymentService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final JSONParser parser = new JSONParser();
 
@@ -103,6 +104,8 @@ public class ApiV1PaymentController {
                     return ResponseEntity.status(code).body(jsonObject);
                 }
 
+                paymentService.savePaymentData(jsonObject);
+
                 logger.info("Payment successful: {}", jsonObject);
                 return ResponseEntity.ok(jsonObject);
             }
@@ -126,34 +129,5 @@ public class ApiV1PaymentController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-    }
-
-    // 결제 금액 조회
-    @GetMapping("/pay/amount/{missingId}")
-    public ResponseEntity<PaymentResponse> getPaymentAmount(@PathVariable("missingId") Long missingId) {
-        try {
-//            Missing missing = missingService.findById(missingId);
-//            if (missing == null) {
-//                return ResponseEntity.notFound().build();
-//            }
-
-            PaymentResponse response = new PaymentResponse();
-//            response.setAmount(missing.getReward());
-            response.setMissingId(missingId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    // 결제 금액 조회를 위한 response 객체
-    static class PaymentResponse {
-        private Integer amount;
-        private Long missingId;
-
-        public Integer getAmount() { return amount; }
-        public void setAmount(Integer amount) { this.amount = amount; }
-        public Long getMissingId() { return missingId; }
-        public void setMissingId(Long missingId) { this.missingId = missingId; }
     }
 }
