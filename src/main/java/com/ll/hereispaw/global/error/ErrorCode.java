@@ -29,7 +29,6 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
     // Auth
-
     ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다."),
     SC_FORBIDDEN(HttpStatus.UNAUTHORIZED, "권한이 없는 유저입니다."),
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "서명 검증에 실패했습니다." ),
@@ -41,7 +40,10 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
 
     // myPet
-    MY_PET_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 반려견을 찾을 수 없습니다.");
+    MY_PET_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 반려견을 찾을 수 없습니다."),
+
+    // missing
+    MISSING_NOT_FOUND(HttpStatus.NOT_FOUND, "신고글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
