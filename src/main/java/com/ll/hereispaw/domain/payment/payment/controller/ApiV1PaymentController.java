@@ -1,6 +1,6 @@
-package com.ll.hereispaw.domain.payment.controller;
+package com.ll.hereispaw.domain.payment.payment.controller;
 
-import com.ll.hereispaw.domain.payment.service.PaymentService;
+import com.ll.hereispaw.domain.payment.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

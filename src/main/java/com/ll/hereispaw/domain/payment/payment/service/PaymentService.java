@@ -1,7 +1,7 @@
-package com.ll.hereispaw.domain.payment.service;
+package com.ll.hereispaw.domain.payment.payment.service;
 
-import com.ll.hereispaw.domain.payment.entity.Payment;
-import com.ll.hereispaw.domain.payment.repository.PaymentRepository;
+import com.ll.hereispaw.domain.payment.payment.entity.Payment;
+import com.ll.hereispaw.domain.payment.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
