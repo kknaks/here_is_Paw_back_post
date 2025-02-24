@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
 
+    // 결제 후 response data를 DB에 저장
     @Transactional
     public Payment savePaymentData(JSONObject responseData) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
