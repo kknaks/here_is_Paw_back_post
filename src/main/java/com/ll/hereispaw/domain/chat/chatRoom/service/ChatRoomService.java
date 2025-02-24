@@ -30,9 +30,7 @@ public class ChatRoomService {
         Optional<ChatRoom> chatRoom = this.chatRoomRepository.findById(id);
         if(chatRoom.isPresent()){
            ChatRoom chatRoom1 = chatRoom.get();
-
            ChatRoomDto ChatRoomDto = new ChatRoomDto(chatRoom1);
-
             return chatRoom.get();
         }else {
             throw new RuntimeException("error ChatService viewRoom");
