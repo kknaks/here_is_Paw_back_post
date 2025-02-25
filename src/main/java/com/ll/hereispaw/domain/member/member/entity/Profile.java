@@ -1,19 +1,18 @@
-package com.ll.hereispaw.domain.member.profile.entity;
+package com.ll.hereispaw.domain.member.member.entity;
 
-import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Profile extends BaseEntity {
