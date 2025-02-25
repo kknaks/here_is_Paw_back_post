@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class MyPetResponseDto {
+    private long id;
     private String name;
 
     private String breed;
@@ -24,6 +25,7 @@ public class MyPetResponseDto {
 
     public static MyPetResponseDto of(MyPet myPet) {
         MyPetResponseDto dto = new MyPetResponseDto();
+        dto.setId(myPet.getId());
         dto.setName(myPet.getName());
         dto.setBreed(myPet.getBreed());
         dto.setColor(myPet.getColor());

@@ -3,6 +3,7 @@ package com.ll.hereispaw.domain.member.member.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.global.jpa.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -34,9 +35,12 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 50)
     private String apiKey;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<MyPet> myPets;
+
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<BookMark> bookMarks;
 
     private String avatar;
 
