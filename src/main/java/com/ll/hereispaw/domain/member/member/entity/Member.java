@@ -47,7 +47,7 @@ public class Member extends BaseEntity {
     private List<MyPet> myPets;
 
 //    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<BookMark> bookMarks;
+//    private List<Bookmark> bookMarks;
 
     private String avatar;
 
