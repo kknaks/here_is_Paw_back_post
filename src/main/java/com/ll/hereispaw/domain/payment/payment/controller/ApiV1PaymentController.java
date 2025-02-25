@@ -1,6 +1,8 @@
 package com.ll.hereispaw.domain.payment.payment.controller;
 
+import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.payment.payment.service.PaymentService;
+import com.ll.hereispaw.global.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,9 +23,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-// TODO: CORD 설정 어떻게?
+// TODO: CORS 설정 어떻게?
 // TODO: response 객체 관련 수정해야 함.
 // TODO: 회원 객체 받아서 DB에 함께 저장 / 연관 관계 설정
+// TODO: 포인트 조회 로직 구현
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
@@ -48,7 +51,14 @@ public class ApiV1PaymentController {
 
     // 결제 승인
     @PostMapping("/confirm")
-    public ResponseEntity<JSONObject> confirmPayment(@RequestBody PaymentRequest request) throws Exception {
+    public ResponseEntity<JSONObject> confirmPayment(@LoginUser Member loginUser, @RequestBody PaymentRequest request) throws Exception {
+        if (loginUser == null) {
+            JSONObject errorResponse = new JSONObject();
+            errorResponse.put("code", "UNAUTHORIZED");
+            errorResponse.put("message", "로그인이 필요한 서비스입니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+        }
+
         try {
             // request 로깅
             logger.info("Received payment request: {}", request);
@@ -105,7 +115,7 @@ public class ApiV1PaymentController {
                     return ResponseEntity.status(code).body(jsonObject);
                 }
 
-                paymentService.savePaymentData(jsonObject);
+                paymentService.savePaymentData(jsonObject, loginUser);
 
                 logger.info("Payment successful: {}", jsonObject);
                 return ResponseEntity.ok(jsonObject);
@@ -121,7 +131,11 @@ public class ApiV1PaymentController {
 
     // 결제 요청
     @GetMapping("/pay")
-    public ResponseEntity<?> pay(@RequestParam("amount") Integer amount) {
+    public ResponseEntity<?> pay(@LoginUser Member loginUser, @RequestParam("amount") Integer amount) {
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 하지 않은 사용자입니다.");
+        }
+
         try {
             // 프론트엔드 체크아웃 페이지로 리다이렉트
             HttpHeaders headers = new HttpHeaders();
@@ -129,6 +143,22 @@ public class ApiV1PaymentController {
             return new ResponseEntity<>(headers, HttpStatus.FOUND);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // 포인트 조회
+    @GetMapping("/points")
+    public ResponseEntity<?> getPoints(@RequestParam("member_id") Long memberId) {
+        try {
+            Integer points = paymentService.getPointsByMemberId(memberId);
+            if (points == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("해당 회원의 포인트 정보를 찾을 수 없습니다.");
+            }
+            return ResponseEntity.ok().body(points);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body("포인트 조회 중 오류가 발생했습니다.");
         }
     }
 }
