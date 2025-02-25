@@ -1,14 +1,14 @@
 package com.ll.hereispaw.domain.find.find.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FindWithPhotoRequest {
     // 기존 FindRequest 필드
     private Long id;

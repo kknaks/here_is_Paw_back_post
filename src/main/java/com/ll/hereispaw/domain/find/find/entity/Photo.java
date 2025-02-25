@@ -22,7 +22,7 @@ public class Photo {
 
     private String path_url; // 이미지 경로
 
-    private Long find_post_id; // 게시글 id
+    private Long postId; // 게시글 id
     private Long member_id; // 작성자 id
 
     public Photo() {

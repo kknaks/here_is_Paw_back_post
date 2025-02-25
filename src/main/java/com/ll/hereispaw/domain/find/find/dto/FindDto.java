@@ -21,7 +21,6 @@ public class FindDto {
     private String gender; // 성별
     private String etc; // 기타 특징
 
-    private int serial_number; // 등록 번호
     private int age; // 나이
 
     private boolean neutered; // 중성화 유무
@@ -30,5 +29,7 @@ public class FindDto {
 
     private Long member_id; // 신고한 회원 id
     private Long shelter_id; // 보호소 id
+
+    private String path_url;
 
 }
