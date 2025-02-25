@@ -1,6 +1,7 @@
 package com.ll.hereispaw.domain.payment.payment.entity;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.global.jpa.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Payment {
-    @Id
+public class Payment extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;          // 결제한 회원
