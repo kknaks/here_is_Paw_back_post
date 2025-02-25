@@ -23,6 +23,7 @@ import java.util.Base64;
 
 // TODO: CORD 설정 어떻게?
 // TODO: response 객체 관련 수정해야 함.
+// TODO: 회원 객체 받아서 DB에 함께 저장 / 연관 관계 설정
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
