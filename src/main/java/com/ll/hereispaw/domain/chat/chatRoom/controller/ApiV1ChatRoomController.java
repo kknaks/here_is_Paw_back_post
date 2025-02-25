@@ -23,7 +23,7 @@ public class ApiV1ChatRoomController {
         Page<ChatRoomDto> pagingDto = paging.map(chatRoom ->
                 new ChatRoomDto(chatRoom)
         );
-        return GlobalResponse.success(pagingDto);
+        return GlobalResponse.success( pagingDto);
     }
 
     //채팅방

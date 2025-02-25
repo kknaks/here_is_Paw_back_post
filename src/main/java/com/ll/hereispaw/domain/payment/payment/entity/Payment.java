@@ -1,9 +1,13 @@
 package com.ll.hereispaw.domain.payment.payment.entity;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
-import com.ll.hereispaw.global.jpa.entity.BaseEntity;
+import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "payments")
 @Entity
@@ -11,7 +15,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Payment extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "member_id")

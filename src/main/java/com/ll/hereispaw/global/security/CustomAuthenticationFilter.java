@@ -88,7 +88,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 List.of(
                         "/api/v1/members/login",
                         "/api/v1/members/logout",
-                        "/api/v1/members/signup"
+                        "/api/v1/members/signup",
+                        "/api/v1/chat/**"
                 ).contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
