@@ -1,4 +1,4 @@
-package com.ll.hereispaw.find.find.entity;
+package com.ll.hereispaw.domain.find.find.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

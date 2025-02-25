@@ -1,4 +1,4 @@
-package com.ll.hereispaw.find.find.dto;
+package com.ll.hereispaw.domain.find.find.dto;
 
 import lombok.Getter;
 import lombok.Setter;
