@@ -4,6 +4,7 @@ import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.payment.payment.service.PaymentService;
 import com.ll.hereispaw.global.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -23,13 +24,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-// TODO: CORS 설정 어떻게?
 // TODO: response 객체 관련 수정해야 함. GlobalResponse
 // TODO: 회원 객체 받아서 DB에 함께 저장 -> 결과 확인할 것
 // TODO: 결제 후 결제 금액이 잘 추가되는지 확인
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+@RequestMapping("/api/v1/payment")
 public class ApiV1PaymentController {
     private final PaymentService paymentService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -148,13 +149,14 @@ public class ApiV1PaymentController {
 
     // 포인트 조회
     @GetMapping("/points")
-    public ResponseEntity<?> getPoints(@RequestParam("member_id") Long memberId) {
+    public ResponseEntity<?> getPoints(@LoginUser Member loginUser) {
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요한 서비스입니다.");
+        }
+
         try {
-            Integer points = paymentService.getPointsByMemberId(memberId);
-            if (points == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("해당 회원의 포인트 정보를 찾을 수 없습니다.");
-            }
+            Integer points = paymentService.getPointsByMemberId(loginUser.getId());
             return ResponseEntity.ok().body(points);
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
