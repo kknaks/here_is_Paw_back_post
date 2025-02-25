@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.1"
+    id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -35,6 +35,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    //websocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+
     //validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
@@ -46,6 +49,8 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     // OAuth2
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    // JSON Simple
+    implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
     //S3 bucket
     implementation(platform("software.amazon.awssdk:bom:2.24.0"))
