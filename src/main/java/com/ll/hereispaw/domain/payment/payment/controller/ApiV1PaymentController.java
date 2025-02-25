@@ -24,8 +24,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 // TODO: CORS 설정 어떻게?
-// TODO: response 객체 관련 수정해야 함.
+// TODO: response 객체 관련 수정해야 함. GlobalResponse
 // TODO: 회원 객체 받아서 DB에 함께 저장 -> 결과 확인할 것
+// TODO: 결제 후 결제 금액이 잘 추가되는지 확인
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})

@@ -17,7 +17,7 @@ import java.util.List;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
 
-    // 결제 후 response data를 DB에 저장
+    // 결제 후 포인트(amount)를 DB에 저장
     @Transactional
     public Payment savePaymentData(JSONObject responseData, Member member) {
         JSONObject card = (JSONObject) responseData.get("card");
