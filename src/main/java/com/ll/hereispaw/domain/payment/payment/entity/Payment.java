@@ -1,20 +1,22 @@
 package com.ll.hereispaw.domain.payment.payment.entity;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
-@Entity
 @Table(name = "payments")
-@Getter
+@Entity
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-@Builder
-public class Payment {
-    @Id
+@NoArgsConstructor
+@SuperBuilder
+public class Payment extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;          // 결제한 회원
