@@ -5,7 +5,11 @@ import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.domain.payment.payment.entity.Payment;
 import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,11 +20,11 @@ import java.util.List;
 
 @Slf4j
 @Entity
-@Getter
 @Setter
-@Builder
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class Member extends BaseEntity {
     @Column(unique = true, length = 30)
     private String username;
@@ -36,6 +40,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     @JsonManagedReference
     private List<MyPet> myPets;
+
+    private String avatar;
 
     public boolean isAdmin() {
         return "admin".startsWith(username);

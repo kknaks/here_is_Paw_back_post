@@ -35,6 +35,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    //websocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+
     //validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
@@ -48,6 +51,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     // JSON Simple
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
+
+    //S3 bucket
+    implementation(platform("software.amazon.awssdk:bom:2.24.0"))
+    implementation("software.amazon.awssdk:s3")
+
+    //swegger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+
 }
 
 tasks.withType<Test> {
