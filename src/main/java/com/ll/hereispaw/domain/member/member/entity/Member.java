@@ -2,10 +2,9 @@ package com.ll.hereispaw.domain.member.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
+import com.ll.hereispaw.domain.payment.payment.entity.Payment;
 import com.ll.hereispaw.global.jpa.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,7 +51,6 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
-}
 
     public Member(long id, String username, String nickname) {
         this.setId(id);
