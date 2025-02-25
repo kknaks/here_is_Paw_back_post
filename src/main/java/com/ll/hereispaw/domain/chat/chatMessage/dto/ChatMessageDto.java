@@ -19,8 +19,8 @@ public class ChatMessageDto {
         this.chatMessageId      = chatMessage.getId();
         this.chatRoomId         = chatMessage.getChatRoom().getId();
         this.content            = chatMessage.getContent();
-        this.createdDate        = chatMessage.getCreatedDate();
-        this.modifiedDate       = chatMessage.getModifiedDate();
+        this.createdDate        = chatMessage.getCreateDate();
+        this.modifiedDate       = chatMessage.getModifyDate();
 
     }
 }

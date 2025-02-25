@@ -4,14 +4,12 @@ import com.ll.hereispaw.domain.member.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
-@Entity
 @Table(name = "payments")
-@Getter
+@Entity
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Payment {
     @Id

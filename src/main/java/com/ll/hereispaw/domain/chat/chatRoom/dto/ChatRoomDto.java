@@ -19,8 +19,8 @@ public class ChatRoomDto {
     public ChatRoomDto(ChatRoom chatRoom){
 
         this.id = chatRoom.getId();
-        this.createdDate = chatRoom.getCreatedDate();
-        this.modifiedDate = chatRoom.getModifiedDate();
+        this.createdDate = chatRoom.getCreateDate();
+        this.modifiedDate = chatRoom.getModifyDate();
         this.roomState = chatRoom.getRoomState();
         this.chatMessages = chatRoom.getChatMessages();
     }

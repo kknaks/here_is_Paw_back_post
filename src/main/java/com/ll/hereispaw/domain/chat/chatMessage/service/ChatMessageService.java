@@ -26,7 +26,7 @@ public class ChatMessageService {
 
             chatMessage.setContent(content);
             chatMessage.setChatRoom(chatRoom);
-            chatMessage.setCreatedDate(LocalDateTime.now());
+            chatMessage.setCreateDate(LocalDateTime.now());
 
             return this.chatMessageRepository.save(chatMessage);
         }else{

@@ -40,7 +40,7 @@ public class ChatRoomService {
     //채팅방 생성
     public ChatRoom createRoom(){
         ChatRoom chatRoom = ChatRoom.builder()
-                .createdDate(LocalDateTime.now())
+                .createDate(LocalDateTime.now())
                 //.roomState()
                 .build();
         chatRoomRepository.save(chatRoom);

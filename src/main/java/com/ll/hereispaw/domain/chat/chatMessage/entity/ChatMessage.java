@@ -5,16 +5,18 @@ import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Getter
 @Setter
-@SuperBuilder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@SuperBuilder
 public class ChatMessage extends BaseEntity {
 
     @JsonBackReference
