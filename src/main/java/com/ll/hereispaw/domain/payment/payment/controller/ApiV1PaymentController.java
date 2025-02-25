@@ -120,8 +120,8 @@ public class ApiV1PaymentController {
     }
 
     // 결제 요청
-    @GetMapping("/pay/{amount}")
-    public ResponseEntity<?> pay(@PathVariable("amount") Integer amount) {
+    @GetMapping("/pay")
+    public ResponseEntity<?> pay(@RequestParam("amount") Integer amount) {
         try {
             // 프론트엔드 체크아웃 페이지로 리다이렉트
             HttpHeaders headers = new HttpHeaders();

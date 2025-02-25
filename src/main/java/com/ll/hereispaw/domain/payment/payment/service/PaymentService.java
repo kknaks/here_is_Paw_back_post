@@ -18,16 +18,6 @@ public class PaymentService {
     // 결제 후 response data를 DB에 저장
     @Transactional
     public Payment savePaymentData(JSONObject responseData) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        LocalDateTime requestedAt = LocalDateTime.parse((String) responseData.get("requestedAt"), formatter);
-        LocalDateTime approvedAt = LocalDateTime.parse((String) responseData.get("approvedAt"), formatter);
-
-        JSONObject easyPay = (JSONObject) responseData.get("easyPay");
-        Integer discountAmount = 0;
-        if (easyPay != null) {
-            discountAmount = ((Long) easyPay.get("discountAmount")).intValue();
-        }
-
         JSONObject card = (JSONObject) responseData.get("card");
         Integer amount = 0;
         if (card != null) {
@@ -35,16 +25,7 @@ public class PaymentService {
         }
 
         Payment payment = Payment.builder()
-                .paymentKey((String) responseData.get("paymentKey"))
-                .orderId((String) responseData.get("orderId"))
-                .orderName((String) responseData.get("orderName"))
-                .status((String) responseData.get("status"))
-                .method((String) responseData.get("method"))
-                .totalAmount(((Long) responseData.get("totalAmount")).intValue())
-                .discountAmount(discountAmount)
                 .amount(amount)
-                .requestedAt(requestedAt)
-                .approvedAt(approvedAt)
                 .build();
 
         return paymentRepository.save(payment);
