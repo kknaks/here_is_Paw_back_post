@@ -25,8 +25,7 @@ import java.util.Base64;
 
 // TODO: CORS 설정 어떻게?
 // TODO: response 객체 관련 수정해야 함.
-// TODO: 회원 객체 받아서 DB에 함께 저장 / 연관 관계 설정
-// TODO: 포인트 조회 로직 구현
+// TODO: 회원 객체 받아서 DB에 함께 저장 -> 결과 확인할 것
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
