@@ -1,7 +1,7 @@
 package com.ll.hereispaw.domain.missing.missing.entity;
 
 import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
-import com.ll.hereispaw.global.jpa.entity.BaseEntity;
+import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;

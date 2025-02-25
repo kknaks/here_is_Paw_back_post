@@ -1,7 +1,7 @@
 package com.ll.hereispaw.domain.payment.payment.entity;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
-import com.ll.hereispaw.global.jpa.entity.BaseEntity;
+import com.ll.hereispaw.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
