@@ -40,5 +40,4 @@ public class ApiV1ChatRoomController {
          ChatRoomDto chatRoomDto = new ChatRoomDto(chatRoom);
          return chatRoomDto;
     }
-
 }

@@ -32,13 +32,5 @@ public class ChatMessageService {
         }else{
             throw new RuntimeException("error ChatMessageService writeMessage");
         }
-        /* 빌더 사용 실패
-        ChatMessage writeMessage = ChatMessage.builder()
-                .chatRoom()
-                .content(content)
-                .createdDate(LocalDateTime.now())
-                .build();
-        ChatMessage chatMessage = this.chatMessageRepository.save(writeMessage);
-*/
     }
 }

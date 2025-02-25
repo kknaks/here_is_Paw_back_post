@@ -1,16 +1,12 @@
-package com.ll.hereispaw.global.jpa;
+package com.ll.hereispaw.global.jpa.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,27 +15,20 @@ import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@MappedSuperclass
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SuperBuilder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@ToString
-public class BaseEntity {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = IDENTITY) // AUTO_INCREMENT
-    @Setter(AccessLevel.PROTECTED)
+    @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
     @CreatedDate
-    @Setter(AccessLevel.PRIVATE)
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
-    @Setter(AccessLevel.PRIVATE)
-    private LocalDateTime modifyDate;
+    private LocalDateTime modifiedDate;
 }
