@@ -8,8 +8,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.*;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +48,8 @@ public class Member extends BaseEntity {
 //    private List<Bookmark> bookMarks;
 
     private String avatar;
+
+    private int radius = 500;
 
     public boolean isAdmin() {
         return "admin".startsWith(username);

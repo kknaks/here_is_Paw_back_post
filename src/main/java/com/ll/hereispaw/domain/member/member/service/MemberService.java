@@ -6,6 +6,8 @@ import com.ll.hereispaw.domain.member.member.dto.response.LoginResponse;
 import com.ll.hereispaw.domain.member.member.dto.response.MemberInfoDto;
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.member.member.repository.MemberRepository;
+import com.ll.hereispaw.global.error.ErrorCode;
+import com.ll.hereispaw.global.exception.CustomException;
 import com.ll.hereispaw.global.rq.Rq;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
     private final AuthTokenService authTokenService;
     private final MemberRepository memberRepository;
@@ -34,6 +38,7 @@ public class MemberService {
         return new MemberInfoDto(loginUser);
     }
 
+    @Transactional
     public Member signup(String username, String password, String nickname, String avatar) {
         memberRepository
                 .findByUsername(username)
@@ -52,6 +57,7 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    @Transactional
     public Member signup(SignupRequest signupRq) {
         String username = signupRq.username();
 
@@ -105,11 +111,13 @@ public class MemberService {
         return member;
     }
 
+    @Transactional
     public void modify(Member member, @NotBlank String nickname, String avatar) {
         member.setNickname(nickname);
         member.setAvatar(avatar);
     }
 
+    @Transactional
     public Member modifyOrJoin(String username, String nickname, String avatar) {
         Optional<Member> opMember = findByUsername(username);
         if (opMember.isPresent()) {
@@ -120,6 +128,7 @@ public class MemberService {
         return signup(username, "", nickname, avatar);
     }
 
+    @Transactional
     public LoginResponse login(LoginRequest loginRq) {
         Member member = memberRepository.findByUsername(loginRq.username())
                 .orElseThrow(() -> new EntityNotFoundException("해당 유저는 없습니다."));
@@ -132,7 +141,18 @@ public class MemberService {
         return new LoginResponse(new MemberInfoDto(member), member.getApiKey(), token);
     }
 
+    @Transactional
     public void update(Member member) {
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public void radius_update(Member loginUser, Integer radius) {
+        Member user = memberRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        user.setRadius(radius);
+
+        memberRepository.save(user);
     }
 }

@@ -42,7 +42,7 @@ public class ApiV1MemberController {
     // username (= id)의 앞에 admin 입력하여 등록 시 admin 권한 부여
     // username (= id)의 앞에 manager 입력하여 등록 시 manager 권한 부여
     @PostMapping("/signup")
-    public ResponseEntity<String > signup(@Valid @RequestBody SignupRequest signupRq) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRq) {
         memberService.signup(signupRq);
         return ResponseEntity.status(HttpStatus.CREATED).body("회원 생성 완료");
     }
@@ -53,6 +53,12 @@ public class ApiV1MemberController {
         LoginResponse loginUser = memberService.login(loginRq);
 
         return ResponseEntity.status(HttpStatus.OK).body(loginUser);
+    }
+
+    @PatchMapping("/radius-update")
+    public ResponseEntity<String> radius_update(@LoginUser Member loginUser, Integer radius) {
+        memberService.radius_update(loginUser, radius);
+        return ResponseEntity.ok("로케이션 업데이트");
     }
 
     // 로그아웃
