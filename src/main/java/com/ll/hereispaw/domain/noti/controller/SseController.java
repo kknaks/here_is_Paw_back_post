@@ -1,7 +1,9 @@
 package com.ll.hereispaw.domain.noti.controller;
 
+import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.noti.entity.Noti;
 import com.ll.hereispaw.domain.noti.service.SseService;
+import com.ll.hereispaw.global.webMvc.LoginUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseController {
   private final SseService sseService;
 
-  @GetMapping(value = "/connect/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public ResponseEntity<SseEmitter> add(@PathVariable String userId) {
-    return ResponseEntity.ok(sseService.add(userId));
+  @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public ResponseEntity<SseEmitter> add(@LoginUser Member member) {
+    Long memberId = member.getId();
+    return ResponseEntity.ok(sseService.add(memberId.toString()));
   }
 
   @GetMapping(value = "/disconnect/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

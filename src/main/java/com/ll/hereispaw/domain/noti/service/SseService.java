@@ -20,53 +20,51 @@ public class SseService {
   private final NotiRepository notiRepository;
 
   public SseEmitter add(String userId){
-    if (emitters.containsKey(userId)) {
-      return emitters.get(userId);
-    }
-
+//    if (emitters.containsKey(userId)) {
+//      return emitters.get(userId);
+//    }
+    // 타임아웃 설정 (1시간)
     SseEmitter emitter = new SseEmitter(3600000L);
 
+    // 연결 완료 콜백
+    emitter.onCompletion(() -> {
+      log.info("SSE connection completed for user: {}", userId);
+      this.emitters.remove(userId);
+    });
+
+    // 타임아웃 콜백
+    emitter.onTimeout(() -> {
+      log.info("SSE connection timeout for user: {}", userId);
+      emitter.complete();
+      this.emitters.remove(userId);
+    });
+
+    // 에러 콜백
+    emitter.onError((e) -> {
+      log.error("SSE connection error for user: {}", userId, e);
+      emitter.complete();
+      this.emitters.remove(userId);
+    });
+
+    // 초기 연결 이벤트 전송
     try {
       emitter.send(SseEmitter.event()
           .name("connect")
-          .data("connected!"+userId));
-
-      sendUnreadNoti(userId, emitter);
+          .data("Connected to notification service"));
     } catch (IOException e) {
-      emitter.completeWithError(e);
+      log.error("Error sending initial SSE event to user: {}", userId, e);
+      emitter.complete();
       return emitter;
     }
-    // 클라이언트와의 연결이 완료되면 컬렉션에서 제거하는 콜백
-    emitter.onCompletion(() -> {
-      this.emitters.remove(emitter);
-    });
 
-    // 연결이 타임아웃되면 완료 처리하는 콜백
-    emitter.onTimeout(() -> {
-      emitter.complete();
-      emitters.remove(userId);
-    });
+    // 사용자 ID로 emitter 저장
+    this.emitters.put(userId, emitter);
+    log.info("SSE connection established for user: {}", userId);
 
-    emitter.onError(e -> {
-      log.error("SSE 에러 발생: {}", e.getMessage());
-      emitters.remove(userId);
-    });
-
-    emitters.put(userId, emitter);
     return emitter;
   }
 
   public void sendNoti(String userId, String eventName, NotiRequest notiRequest){
-
-    Noti noti = Noti.builder()
-        .userId(userId)
-        .eventName(eventName)
-        .notiRequest(notiRequest)
-        .read(false)
-        .build();
-
-    notiRepository.save(noti);
-
     SseEmitter emitter = emitters.get(userId);
 
     if (emitter != null) {
@@ -74,9 +72,6 @@ public class SseService {
         emitter.send(SseEmitter.event()
             .name(eventName)
             .data(notiRequest));
-
-        noti.markAsRead();
-        notiRepository.save(noti);
 
       } catch (IOException e) {
         emitters.remove(userId);
