@@ -33,7 +33,19 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me    # 사용자 정보 조회 URI
             user-name-attribute: id    # 사용자 정보에서 사용자 이름에 해당하는 속성
+  kafka:
+    bootstrap-servers: localhost:19092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # Swagger UI 경로
+  api-docs:
+    path: /api-docs        # API 문서 경로
 logging:
   level:
     root: info
-    com.ll.hereispaw : debug
+    com.ll.hereispaw : debug, warn
+

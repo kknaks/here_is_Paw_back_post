@@ -1,11 +1,13 @@
 package com.ll.hereispaw.domain.find.find.service;
 
+import com.ll.hereispaw.domain.find.find.dto.DogFaceRequestDto;
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.entity.FindPost;
 import com.ll.hereispaw.domain.find.find.entity.Photo;
 import com.ll.hereispaw.domain.find.find.repository.FindPhotoRepository;
 import com.ll.hereispaw.domain.find.find.repository.FindRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +19,13 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class FindService {
+    private static String POST_TYPE = "finding";
 
     private final FindRepository findRepository;
     private final FindPhotoRepository findPhotoRepository;
+
+    //카프카 발행자 템플릿
+    private final KafkaTemplate<Object, Object> kafkaTemplate;
 
     public Long saveFind(
             String breed,
@@ -53,6 +59,15 @@ public class FindService {
         findPost.setShelter_id(shelter_id);
 
         FindPost savedPost = findRepository.save(findPost);
+
+        //카프카 메시지 발행
+        DogFaceRequestDto dogFaceRequestDto = DogFaceRequestDto.builder()
+            .type("save")
+            .image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZAHxgFBNiIPBx5mXMtIoMN7udx45JgJOoq0aZqnhHhxcQEKsjcjMivntAgRt_tUIP8ZsY5wOuNyXscwNWrBoHYGZfhFzhCPAO2lq87Ag")
+            .postType(POST_TYPE)
+            .postId(savedPost.getId())
+            .build();
+        kafkaTemplate.send("dog-face-request", dogFaceRequestDto);
         return savedPost.getId(); // 저장된 find_post_id 반환
     }
 
