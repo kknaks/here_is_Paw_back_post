@@ -22,6 +22,8 @@ public class FindPost {
     @EqualsAndHashCode.Include
     private Long id;
 
+    private String title; // 글 제목
+    private String situation; // 발견 상황
     private String breed; // 견종
     private String geo; // 좌표인데 타입 확인 필요
     private String location; // 지역

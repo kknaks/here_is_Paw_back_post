@@ -32,105 +32,105 @@ import java.util.stream.Collectors;
 @Tag(name = " 프로필사진 API", description = "Member")
 public class ApiV1AvatarController {
 
-  @Value("${custom.bucket.name}")
-  private String bucketName;
+    @Value("${custom.bucket.name}")
+    private String bucketName;
 
-  @Value("${custom.bucket.region}")
-  private String region;
+    @Value("${custom.bucket.region}")
+    private String region;
 
-  @Value("${custom.bucket.avatar}")
-  private String dirName;
+    @Value("${custom.bucket.avatar}")
+    private String dirName;
 
-  private final S3Client s3Client;
-  private final MemberService memberService;
+    private final S3Client s3Client;
+    private final MemberService memberService;
 
-  @Operation(summary = "회원 프로필 사진 조회")
-  @GetMapping
-  public List<String> myprofile(@LoginUser Member loginUser) {
-    List<Bucket> bucketList = s3Client.listBuckets().buckets();
-    return bucketList.stream().map(Bucket::name).collect(Collectors.toList());
-  }
-
-  @Operation(summary = "회원 프로필 사진 업로드")
-  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public GlobalResponse<String> upload(
-      @LoginUser Member loginUser,
-      MultipartFile file) {
-    try {
-      Member member = memberService.findById(loginUser.getId()).get();
-      String filename = getUuidFilename(file);
-      PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-          .bucket(bucketName)
-          .key(dirName + "/" + filename)
-          .contentType(file.getContentType())
-          .build();
-
-      s3Client.putObject(putObjectRequest,
-          RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-
-      member.setAvatar(getS3FileUrl(filename));
-      memberService.update(member);
-
-
-    } catch (IOException e) {
-      return GlobalResponse.error(ErrorCode.S3_UPLOAD_ERROR);
+    @Operation(summary = "회원 프로필 사진 조회")
+    @GetMapping
+    public List<String> myprofile(@LoginUser Member loginUser) {
+        List<Bucket> bucketList = s3Client.listBuckets().buckets();
+        return bucketList.stream().map(Bucket::name).collect(Collectors.toList());
     }
 
-    return GlobalResponse.success("업로드 성공");
-  }
+    @Operation(summary = "회원 프로필 사진 업로드")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public GlobalResponse<String> upload(
+            @LoginUser Member loginUser,
+            MultipartFile file) {
+        try {
+            Member member = memberService.findById(loginUser.getId()).get();
+            String filename = getUuidFilename(file);
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(dirName + "/" + filename)
+                    .contentType(file.getContentType())
+                    .build();
 
-  @Operation(summary = "회원 프로필 사진 삭제")
-  @DeleteMapping
-  public GlobalResponse<String> delete(@LoginUser Member loginUser) {
-    try {
-      Member member = memberService.findById(loginUser.getId()).get();
-      String fileName = getFileNameFromS3Url(member.getAvatar());
-      DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-          .bucket(bucketName)
-          .key(dirName + "/" + fileName)
-          .build();
-      s3Client.deleteObject(deleteObjectRequest);
-      member.setAvatar(getS3FileUrl("defaultAvatar.jpg"));
-    } catch (Exception e) {
-      log.warn("Failed to delete old profile image", e);
-    }
-    return GlobalResponse.success("삭제 성공");
-  }
+            s3Client.putObject(putObjectRequest,
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-  @Operation(summary = "회원 프로필 사진 수정")
-  @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public GlobalResponse<String> update(
-      @LoginUser Member loginUser,
-      MultipartFile file) {
-    Member member = memberService.findById(loginUser.getId()).get();
+            member.setAvatar(getS3FileUrl(filename));
+            memberService.update(member);
 
-    if (member.getAvatar() != null) {
-      delete(loginUser);
-      upload(loginUser, file);
+
+        } catch (IOException e) {
+            return GlobalResponse.error(ErrorCode.S3_UPLOAD_ERROR);
+        }
+
+        return GlobalResponse.success("업로드 성공");
     }
 
-    return GlobalResponse.success("수정 성공");
-  }
+    @Operation(summary = "회원 프로필 사진 삭제")
+    @DeleteMapping
+    public GlobalResponse<String> delete(@LoginUser Member loginUser) {
+        try {
+            Member member = memberService.findById(loginUser.getId()).get();
+            String fileName = getFileNameFromS3Url(member.getAvatar());
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(dirName + "/" + fileName)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+            member.setAvatar(getS3FileUrl("defaultAvatar.jpg"));
+        } catch (Exception e) {
+            log.warn("Failed to delete old profile image", e);
+        }
+        return GlobalResponse.success("삭제 성공");
+    }
 
-  private String getUuidFilename(MultipartFile file) {
-    // ContentType으로부터 확장자 추출
-    String contentType = file.getContentType();
-    String extension = switch (contentType) {
-      case "image/jpeg" -> "jpg";
-      case "image/png" -> "png";
-      case "image/gif" -> "gif";
-      default -> "jpg";  // 기본값 설정
-    };
+    @Operation(summary = "회원 프로필 사진 수정")
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public GlobalResponse<String> update(
+            @LoginUser Member loginUser,
+            MultipartFile file) {
+        Member member = memberService.findById(loginUser.getId()).get();
 
-    // UUID 파일명 생성
-    return UUID.randomUUID().toString() + "." + extension;
-  }
+        if (member.getAvatar() != null) {
+            delete(loginUser);
+            upload(loginUser, file);
+        }
 
-  public String getS3FileUrl(String fileName) {
-    return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + dirName + "/" + fileName;
-  }
+        return GlobalResponse.success("수정 성공");
+    }
 
-  public String getFileNameFromS3Url(String s3Url) {
-    return s3Url.substring(s3Url.lastIndexOf('/') + 1);
-  }
+    private String getUuidFilename(MultipartFile file) {
+        // ContentType으로부터 확장자 추출
+        String contentType = file.getContentType();
+        String extension = switch (contentType) {
+            case "image/jpeg" -> "jpg";
+            case "image/png" -> "png";
+            case "image/gif" -> "gif";
+            default -> "jpg";  // 기본값 설정
+        };
+
+        // UUID 파일명 생성
+        return UUID.randomUUID().toString() + "." + extension;
+    }
+
+    public String getS3FileUrl(String fileName) {
+        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + dirName + "/" + fileName;
+    }
+
+    public String getFileNameFromS3Url(String s3Url) {
+        return s3Url.substring(s3Url.lastIndexOf('/') + 1);
+    }
 }
