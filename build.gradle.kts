@@ -59,6 +59,13 @@ dependencies {
     //swegger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
+    //kafka
+    implementation("org.springframework.kafka:spring-kafka")
+    testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    //docker-compose
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+
 }
 
 tasks.withType<Test> {
