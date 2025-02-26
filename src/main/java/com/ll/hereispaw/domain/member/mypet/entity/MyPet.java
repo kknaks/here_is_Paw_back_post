@@ -29,8 +29,7 @@ public class MyPet extends BaseEntity {
     @Column(nullable = false)
     private String breed;
 
-//    @Column(nullable = false)
-//    private String imageUrl;
+    private String imageUrl;
 
     private String color;
 

@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
     @Column(unique = true, length = 50)
     private String apiKey;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<MyPet> myPets;
 
@@ -71,8 +71,8 @@ public class Member extends BaseEntity {
         return this.password.equals(password);
     }
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Payment payment;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
 
     public Member(long id, String username, String nickname) {
         this.setId(id);
