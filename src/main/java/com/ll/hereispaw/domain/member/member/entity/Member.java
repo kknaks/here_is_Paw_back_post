@@ -1,14 +1,11 @@
 package com.ll.hereispaw.domain.member.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ll.hereispaw.domain.chat.chatMessage.entity.ChatMessage;
+import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.domain.member.mypet.entity.MyPet;
 import com.ll.hereispaw.domain.payment.payment.entity.Payment;
 import com.ll.hereispaw.global.jpa.BaseEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import lombok.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,8 +43,19 @@ public class Member extends BaseEntity {
     @JsonManagedReference
     private List<MyPet> myPets;
 
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Bookmark> bookMarks;
+    //채팅 관계
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "chatUser")
+    @JsonManagedReference
+    private List<ChatRoom> chatRoomsCU;
+
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "targetUser")
+    @JsonManagedReference
+    private List<ChatRoom> chatRoomsTU;
+
+    //메세지 관계
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "member")
+    @JsonManagedReference
+    private List<ChatMessage> chatMessages;
 
     private String avatar;
 
