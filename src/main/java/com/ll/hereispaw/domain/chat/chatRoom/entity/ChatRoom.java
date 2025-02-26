@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.chat.chatRoom.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ll.hereispaw.domain.chat.chatMessage.entity.ChatMessage;
 import com.ll.hereispaw.domain.member.member.entity.Member;
@@ -26,11 +27,15 @@ public class ChatRoom extends BaseEntity {
 
     private int roomState;
 
-    @ManyToOne
-    private Member member;
-
     @OneToMany(fetch = FetchType.EAGER ,mappedBy = "chatRoom" )
     @JsonManagedReference
     private List<ChatMessage> chatMessages;
 
+    @JsonBackReference
+    @ManyToOne
+    private Member chatUser;
+
+    @JsonBackReference
+    @ManyToOne
+    private Member targetUser;
 }
