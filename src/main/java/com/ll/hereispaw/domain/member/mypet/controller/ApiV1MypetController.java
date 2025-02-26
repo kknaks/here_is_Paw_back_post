@@ -8,6 +8,8 @@ import com.ll.hereispaw.domain.member.mypet.service.MyPetService;
 import com.ll.hereispaw.global.error.ErrorCode;
 import com.ll.hereispaw.global.globalDto.GlobalResponse;
 import com.ll.hereispaw.global.webMvc.LoginUser;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +20,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1/mypets")
+@Tag(name = "마이페이지 - 반려견 API", description = "mypet")
 public class ApiV1MypetController {
-
 
     private final MyPetService myPetService;
 
-    // 내 반려견 조회
-    @GetMapping("/mypet")
+    @Operation(summary = "내 반려견 전체 조회")
+    @GetMapping
     public GlobalResponse<?> getPets(@LoginUser Member loginUser) {
         if (loginUser == null) {
             return GlobalResponse.error(ErrorCode.ACCESS_DENIED);
@@ -36,9 +38,11 @@ public class ApiV1MypetController {
         return GlobalResponse.success(myPets);
     }
 
-    // 내 반려견 등록
-    @PostMapping("/mypet")
-    public GlobalResponse<String> createPet(@LoginUser Member loginUser, @Valid @RequestBody MyPetRequest myPetRequest) {
+    @Operation(summary = "반려견 등록")
+    @PostMapping(consumes = {"multipart/form-data"})
+    public GlobalResponse<String> createPet(@LoginUser Member loginUser, @Valid @ModelAttribute MyPetRequest myPetRequest) {
+        log.debug(String.valueOf(myPetRequest));
+
         if (loginUser == null) {
             return GlobalResponse.error(ErrorCode.ACCESS_DENIED);
         }
@@ -52,8 +56,8 @@ public class ApiV1MypetController {
         return GlobalResponse.createSuccess();
     }
 
-    // 내 반려견 단건 조회
-    @GetMapping("/mypet/{id}")
+    @Operation(summary = "반려견 단건 조회")
+    @GetMapping("/{id}")
     public GlobalResponse<?> findByMyPet(@LoginUser Member loginUser, @PathVariable Long id) {
 
         if (loginUser == null) {
@@ -65,9 +69,9 @@ public class ApiV1MypetController {
         return GlobalResponse.success(myPet);
     }
 
-    // 내 반려견 수정
-    @PatchMapping("/mypet/{id}")
-    public GlobalResponse<String> modifyPet(@LoginUser Member loginUser, @Valid @RequestBody MyPetRequest myPetRequest, @PathVariable Long id) {
+    @Operation(summary = "반려견 수정")
+    @PatchMapping(value = "/{id}", consumes = {"multipart/form-data"})
+    public GlobalResponse<String> modifyPet(@LoginUser Member loginUser, @Valid @ModelAttribute MyPetRequest myPetRequest, @PathVariable Long id) {
 
         if (loginUser == null) {
             return GlobalResponse.error(ErrorCode.ACCESS_DENIED);
@@ -78,8 +82,8 @@ public class ApiV1MypetController {
         return GlobalResponse.success();
     }
 
-    // 내 반려견 삭제
-    @DeleteMapping("/mypet/{id}")
+    @Operation(summary = "반려견 삭제")
+    @DeleteMapping("/{id}")
     public GlobalResponse<String> deletePet(@LoginUser Member loginUser, @PathVariable Long id) {
 
         if (loginUser == null) {
