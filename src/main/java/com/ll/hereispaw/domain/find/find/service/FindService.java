@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -100,5 +101,37 @@ public class FindService {
         });
 
         return findDtos;
+    }
+
+    public FindDto findById(Long postId) {
+
+        String path_url = null;
+
+        FindPost findPost = findRepository.findById(postId).get();
+
+        List<Photo> photos = findPhotoRepository.findByPostId(findPost.getId());
+        if (photos != null && !photos.isEmpty()) {
+            path_url = photos.get(0).getPath_url(); // 첫 번째 사진의 URL 사용
+        } else {
+            path_url = "test";
+        }
+
+        FindDto findDto = FindDto.builder()
+                .id(findPost.getId())
+                .age(findPost.getAge())
+                .breed(findPost.getBreed())
+                .color(findPost.getColor())
+                .etc(findPost.getEtc())
+                .find_date(findPost.getFind_date())
+                .gender(findPost.getGender())
+                .geo(findPost.getGeo())
+                .location(findPost.getLocation())
+                .member_id(findPost.getMember_id())
+                .name(findPost.getName())
+                .neutered(findPost.isNeutered())
+                .path_url(path_url)
+                .build();
+
+        return findDto;
     }
 }

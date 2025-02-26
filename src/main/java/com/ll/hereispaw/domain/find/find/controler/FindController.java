@@ -29,6 +29,13 @@ public class FindController {
         return findDtos;
     }
 
+    @GetMapping("/{postId}")
+    public FindDto findPostById(@PathVariable("postId") Long postId) {
+        FindDto findDto = findService.findById(postId);
+
+        return findDto;
+    }
+
     // 유기견 발견 신고시 저장
     @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> newFind(@RequestBody FindWithPhotoRequest request) {
