@@ -34,6 +34,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
 
     //websocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")

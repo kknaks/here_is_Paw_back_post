@@ -2,6 +2,7 @@ package com.ll.hereispaw.domain.find.find.controler;
 
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.dto.FindWithPhotoRequest;
+import com.ll.hereispaw.domain.find.find.service.FindImageService;
 import com.ll.hereispaw.domain.find.find.service.FindService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class FindController {
 
     private final FindService findService;
+    private final FindImageService findImageService;
 
     // 유기견 발견 전체 조회
     @GetMapping
@@ -39,22 +41,25 @@ public class FindController {
     // 유기견 발견 신고시 저장
     @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> newFind(@RequestBody FindWithPhotoRequest request) {
-
-        // 상태 0: 발견, 1: 보호, 2:완료
+        // 상태 0: 발견, 1: 보호, 2: 완료
         int state = 0;
 
-        // saveFind 로 새로 저장 될 때 해당 id 값을 받아옴
+        // Base64 -> URL 변환
+        String imageUrl = findImageService.saveBase64Image(request.getPath_url());
+
+        // saveFind 호출하여 새롭게 저장하고 id 반환
         Long findPostId = findService.saveFind(
+                request.getTitle(), request.getSituation(),
                 request.getBreed(), request.getGeo(), request.getLocation(),
                 request.getName(), request.getColor(), request.getEtc(), request.getGender(),
-                 request.getAge(),
+                request.getAge(),
                 state, request.isNeutered(), request.getFind_date(),
                 request.getMember_id(), request.getShelter_id()
         );
 
-        // 위에서 받아온 id를 담아서 저장, 이미지 경로를 받아옴
-        String path_url = findService.saveFindPhoto(
-                request.getPath_url(),
+        // 변환된 URL을 저장
+        String pathUrl = findService.saveFindPhoto(
+                imageUrl,
                 request.getMember_id(), findPostId
         );
 
@@ -62,9 +67,8 @@ public class FindController {
         response.put("message", "저장 완료");
         response.put("findPostId", findPostId);
 
-        System.out.println("사진 경로 : " + path_url);
-
         return ResponseEntity.ok(response);
     }
+
 
 }

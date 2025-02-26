@@ -29,6 +29,8 @@ public class FindService {
     private final KafkaTemplate<Object, Object> kafkaTemplate;
 
     public Long saveFind(
+            String title,
+            String situation,
             String breed,
             String geo,
             String location,
@@ -45,6 +47,8 @@ public class FindService {
     ) {
         FindPost findPost = new FindPost();
 
+        findPost.setTitle(title);
+        findPost.setSituation(situation);
         findPost.setBreed(breed);
         findPost.setGeo(geo);
         findPost.setLocation(location);
@@ -61,14 +65,6 @@ public class FindService {
 
         FindPost savedPost = findRepository.save(findPost);
 
-        //카프카 메시지 발행
-        DogFaceRequestDto dogFaceRequestDto = DogFaceRequestDto.builder()
-            .type("save")
-            .image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZAHxgFBNiIPBx5mXMtIoMN7udx45JgJOoq0aZqnhHhxcQEKsjcjMivntAgRt_tUIP8ZsY5wOuNyXscwNWrBoHYGZfhFzhCPAO2lq87Ag")
-            .postType(POST_TYPE)
-            .postId(savedPost.getId())
-            .build();
-        kafkaTemplate.send("dog-face-request", dogFaceRequestDto);
         return savedPost.getId(); // 저장된 find_post_id 반환
     }
 
@@ -79,6 +75,16 @@ public class FindService {
         photo.setPostId(findPostId);
 
         Photo savedPhoto = findPhotoRepository.save(photo);
+
+        //카프카 메시지 발행
+        DogFaceRequestDto dogFaceRequestDto = DogFaceRequestDto.builder()
+                .type("save")
+                .image(path_url)
+                .postType(POST_TYPE)
+                .postId(findPostId)
+                .build();
+        kafkaTemplate.send("dog-face-request", dogFaceRequestDto);
+
         return savedPhoto.getPath_url(); // 저장된 photo ID 반환
     }
 
@@ -133,6 +139,8 @@ public class FindService {
 
         FindDto findDto = FindDto.builder()
                 .id(findPost.getId())
+                .title(findPost.getTitle())
+                .situation(findPost.getSituation())
                 .age(findPost.getAge())
                 .breed(findPost.getBreed())
                 .color(findPost.getColor())
@@ -145,6 +153,7 @@ public class FindService {
                 .name(findPost.getName())
                 .neutered(findPost.isNeutered())
                 .path_url(path_url)
+                .member_id(findPost.getMember_id())
                 .build();
 
         return findDto;

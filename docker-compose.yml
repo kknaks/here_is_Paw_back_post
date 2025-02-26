@@ -27,8 +27,6 @@ services:
       - --mode dev-container
       # Enable logs for debugging.
       - --default-log-level=debug
-      - --admin-addr internal://0.0.0.0:9644,external://0.0.0.0:19644
-      - --advertise-admin-addr internal://redpanda-0:9644,external://localhost:19644
     image: docker.redpanda.com/redpandadata/redpanda:v23.3.6
     container_name: redpanda-0
     volumes:
