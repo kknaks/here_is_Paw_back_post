@@ -1,6 +1,7 @@
 package com.ll.hereispaw.domain.payment.payment.controller;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.domain.payment.payment.dto.PaymentRequest;
 import com.ll.hereispaw.domain.payment.payment.service.PaymentService;
 import com.ll.hereispaw.global.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 // TODO: response 객체 관련 수정해야 함. GlobalResponse
-// TODO: 회원 객체 받아서 DB에 함께 저장 -> 결과 확인할 것
-// TODO: 결제 후 결제 금액이 잘 추가되는지 확인
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,20 +36,6 @@ public class ApiV1PaymentController {
     private final PaymentService paymentService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final JSONParser parser = new JSONParser();
-
-    // 결제 승인 시 필요한 데이터
-    static class PaymentRequest {
-        private String orderId;
-        private Integer amount;
-        private String paymentKey;
-
-        public String getOrderId() { return orderId; }
-        public void setOrderId(String orderId) { this.orderId = orderId; }
-        public Integer getAmount() { return amount; }
-        public void setAmount(Integer amount) { this.amount = amount; }
-        public String getPaymentKey() { return paymentKey; }
-        public void setPaymentKey(String paymentKey) { this.paymentKey = paymentKey; }
-    }
 
     // 결제 승인
     @PostMapping("/confirm")
