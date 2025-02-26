@@ -14,7 +14,7 @@ public class MyPetResponseDto {
     private String breed;
 
 //    @Column(nullable = false)
-//    private String imageUrl;
+    private String imageUrl;
 
     private String color;
     private String serialNumber;
@@ -34,6 +34,7 @@ public class MyPetResponseDto {
         dto.setNeutered(myPet.isNeutered());
         dto.setAge(myPet.getAge());
         dto.setEtc(myPet.getEtc());
+        dto.setImageUrl(myPet.getImageUrl());
         return dto;
     }
 
