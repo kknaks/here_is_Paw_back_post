@@ -1,27 +1,36 @@
 package com.ll.hereispaw.domain.find.find.service;
 
+import com.ll.hereispaw.domain.find.find.dto.DogFaceRequestDto;
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.entity.FindPost;
 import com.ll.hereispaw.domain.find.find.entity.Photo;
 import com.ll.hereispaw.domain.find.find.repository.FindPhotoRepository;
 import com.ll.hereispaw.domain.find.find.repository.FindRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class FindService {
+    private static String POST_TYPE = "finding";
 
     private final FindRepository findRepository;
     private final FindPhotoRepository findPhotoRepository;
 
+    //카프카 발행자 템플릿
+    private final KafkaTemplate<Object, Object> kafkaTemplate;
+
     public Long saveFind(
+            String title,
+            String situation,
             String breed,
             String geo,
             String location,
@@ -38,6 +47,8 @@ public class FindService {
     ) {
         FindPost findPost = new FindPost();
 
+        findPost.setTitle(title);
+        findPost.setSituation(situation);
         findPost.setBreed(breed);
         findPost.setGeo(geo);
         findPost.setLocation(location);
@@ -53,6 +64,7 @@ public class FindService {
         findPost.setShelter_id(shelter_id);
 
         FindPost savedPost = findRepository.save(findPost);
+
         return savedPost.getId(); // 저장된 find_post_id 반환
     }
 
@@ -63,6 +75,16 @@ public class FindService {
         photo.setPostId(findPostId);
 
         Photo savedPhoto = findPhotoRepository.save(photo);
+
+        //카프카 메시지 발행
+        DogFaceRequestDto dogFaceRequestDto = DogFaceRequestDto.builder()
+                .type("save")
+                .image(path_url)
+                .postType(POST_TYPE)
+                .postId(findPostId)
+                .build();
+        kafkaTemplate.send("dog-face-request", dogFaceRequestDto);
+
         return savedPhoto.getPath_url(); // 저장된 photo ID 반환
     }
 
@@ -100,5 +122,40 @@ public class FindService {
         });
 
         return findDtos;
+    }
+
+    public FindDto findById(Long postId) {
+
+        String path_url = null;
+
+        FindPost findPost = findRepository.findById(postId).get();
+
+        List<Photo> photos = findPhotoRepository.findByPostId(findPost.getId());
+        if (photos != null && !photos.isEmpty()) {
+            path_url = photos.get(0).getPath_url(); // 첫 번째 사진의 URL 사용
+        } else {
+            path_url = "test";
+        }
+
+        FindDto findDto = FindDto.builder()
+                .id(findPost.getId())
+                .title(findPost.getTitle())
+                .situation(findPost.getSituation())
+                .age(findPost.getAge())
+                .breed(findPost.getBreed())
+                .color(findPost.getColor())
+                .etc(findPost.getEtc())
+                .find_date(findPost.getFind_date())
+                .gender(findPost.getGender())
+                .geo(findPost.getGeo())
+                .location(findPost.getLocation())
+                .member_id(findPost.getMember_id())
+                .name(findPost.getName())
+                .neutered(findPost.isNeutered())
+                .path_url(path_url)
+                .member_id(findPost.getMember_id())
+                .build();
+
+        return findDto;
     }
 }

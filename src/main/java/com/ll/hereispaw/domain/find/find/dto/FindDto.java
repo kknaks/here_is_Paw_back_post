@@ -13,6 +13,8 @@ public class FindDto {
     // 기존 FindRequest 필드
     private Long id;
 
+    private String title; // 제목
+    private String situation; // 발견 상황
     private String breed; // 견종
     private String geo; // 좌표 (타입 확인 필요)
     private String location; // 지역
