@@ -64,10 +64,10 @@ public class ApiV1MemberController {
     }
 
     @PatchMapping("/modify")
-    public ResponseEntity<String> modify(@LoginUser Member member, ModifyRequest modifyRequest) {
-        memberService.modify(member, modifyRequest);
+    public ResponseEntity<MemberInfoDto> modify(@LoginUser Member member, ModifyRequest modifyRequest) {
+        MemberInfoDto memberInfoDto = memberService.modify(member, modifyRequest);
 
-        return ResponseEntity.ok("수정 완료");
+        return ResponseEntity.ok(memberInfoDto);
     }
 
     // 로그아웃

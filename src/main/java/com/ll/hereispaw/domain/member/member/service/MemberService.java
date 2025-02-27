@@ -144,7 +144,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void modify(Member loginUser, ModifyRequest modifyRequest) {
+    public MemberInfoDto modify(Member loginUser, ModifyRequest modifyRequest) {
         Member member = memberRepository.findByUsername(modifyRequest.username()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         if (!loginUser.getUsername().equals(member.getUsername())) {
@@ -160,14 +160,18 @@ public class MemberService {
 
 
             // S3 삭제
-            if (avatar != null && !avatar.equals(defaultAvatar)) deleteImageToS3(member.getAvatar());
+            if (avatar != null && !avatar.equals(defaultAvatar)) {
+                deleteImageToS3(member.getAvatar());
+            }
 
-            String fileName = uploadImageToS3(modifyRequest.profile());
+            String fileName = uploadImageToS3(modifyRequest.profileImage());
             log.debug("파일 네임 {}", fileName);
             member.setAvatar(fileName);
         }
 
         memberRepository.save(member);
+
+        return new MemberInfoDto(member);
     }
 
     @Transactional
