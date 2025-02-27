@@ -1,17 +1,26 @@
 package com.ll.hereispaw.domain.missing.missing.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
 import com.ll.hereispaw.domain.missing.missing.entity.Missing;
+import jakarta.persistence.Convert;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class MissingRequestDTO {
     /**
      * 이름, 견종, 유기견 이미지, 지역, 좌표
@@ -24,38 +33,21 @@ public class MissingRequestDTO {
     private String breed;
     @NotBlank(message = "위치는 필수입력입니다.")
     private String geo;
+    @NotBlank(message = "위치는 필수입력입니다.")
     private String location;
+    @NotNull(message = "사진은 필수입력입니다.")
+    MultipartFile file;
 
     private String color;
     private String serialNumber;
     private boolean gender;
     private boolean neutered;
     private int age;
-    private Timestamp lostDate;
+//    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
+    // ISO 8601 형식의 날짜 문자열을 LocalDateTime으로 자동 변환하기 위한 설정 추가
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private LocalDateTime lostDate;
     private String etc;
     private int reward;
-    private int state;
-
-    private Author author;
-//    @NotBlank(message = "사진은 필수입력입니다.")
-    private String pathUrl;
-
-    public MissingRequestDTO(Missing missing) {
-        author = missing.getAuthor();
-        pathUrl = missing.getPathUrl();
-
-        name = missing.getName();
-        breed = missing.getBreed();
-        geo = missing.getGeo();
-        location = missing.getLocation();
-        color = missing.getColor();
-        serialNumber = missing.getSerialNumber();
-        gender = missing.isGender();
-        neutered = missing.isNeutered();
-        age = missing.getAge();
-        lostDate = missing.getLostDate();
-        etc = missing.getEtc();
-        reward = missing.getReward();
-        state = missing.getState();
-    }
+    private int missingState;
 }

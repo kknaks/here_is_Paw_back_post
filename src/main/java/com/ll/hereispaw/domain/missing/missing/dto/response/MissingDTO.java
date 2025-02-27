@@ -8,12 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class MissingDTO {
     /**
      * 이름, 견종, 유기견 이미지, 지역, 좌표
@@ -24,19 +23,18 @@ public class MissingDTO {
     private String breed;
     private String geo;
     private String location;
+    private String pathUrl;
+    private String nickname;
 
     private String color;
     private String serialNumber;
     private boolean gender;
     private boolean neutered;
     private int age;
-    private Timestamp lostDate;
+    private LocalDateTime lostDate;
     private String etc;
     private int reward;
-    private int state;
-
-    private String pathUrl;
-    private String nickname;
+    private int missingState;
 
     public MissingDTO(Missing missing) {
         nickname = missing.getAuthor().getNickname();
@@ -54,6 +52,6 @@ public class MissingDTO {
         lostDate = missing.getLostDate();
         etc = missing.getEtc();
         reward = missing.getReward();
-        state = missing.getState();
+        missingState = missing.getMissingState();
     }
 }

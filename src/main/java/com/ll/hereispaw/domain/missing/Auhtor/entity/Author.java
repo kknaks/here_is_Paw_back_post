@@ -2,6 +2,7 @@ package com.ll.hereispaw.domain.missing.Auhtor.entity;
 
 
 import com.ll.hereispaw.global.jpa.BaseEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Table(name = "MEMBER")
+//@Tag(name = "MEMBER", description = "Member")
 public class Author extends BaseEntity {
 //    @Column(name="nickname")
     private String nickname;

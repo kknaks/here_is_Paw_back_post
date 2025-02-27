@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +39,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Tag(name = " 실종 신고 API", description = "Missing")
 public class MissingService {
     @Value("${custom.bucket.name}")
@@ -57,11 +59,14 @@ public class MissingService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public MissingDTO write(Author author, MissingRequestDTO missingRequestDto,
-                            MultipartFile file) {
+    @Transactional
+    public MissingDTO write(Author author, MissingRequestDTO missingRequestDto) {
 
-        log.debug("author : {}", missingRequestDto.getAuthor());
+//        log.debug("author : {}", missingRequestDto.getAuthor());
 
+        authorRepository.save(author);
+
+        String pathUrl = s3Upload(missingRequestDto.getFile());
         Missing missing = missingRepository.save(
                 Missing.builder()
                         .name(missingRequestDto.getName())
@@ -73,17 +78,16 @@ public class MissingService {
                         .gender(missingRequestDto.isGender())
                         .neutered(missingRequestDto.isNeutered())
                         .age(missingRequestDto.getAge())
-                        .lostDate(missingRequestDto.getLostDate())
+//                        .lostDate(missingRequestDto.getLostDate())
                         .etc(missingRequestDto.getEtc())
                         .reward(missingRequestDto.getReward())
-                        .state(missingRequestDto.getState())
-                        .pathUrl(missingRequestDto.getPathUrl())
+                        .missingState(missingRequestDto.getMissingState())
+                        .pathUrl(pathUrl)
                         .author(author)
                         .build()
         );
 
-        s3Upload(missing, file);
-
+//        s3Upload(missing, file);
         return new MissingDTO(missing);
     }
 
@@ -100,23 +104,7 @@ public class MissingService {
             Author author = authorRepository.findById(missing.getAuthor().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
             missingDTOS.add(
-                    MissingDTO.builder()
-                            .name(missing.getName())
-                            .breed(missing.getBreed())
-                            .geo(missing.getGeo())
-                            .location(missing.getLocation())
-                            .color(missing.getColor())
-                            .serialNumber(missing.getSerialNumber())
-                            .gender(missing.isGender())
-                            .neutered(missing.isNeutered())
-                            .age(missing.getAge())
-                            .lostDate(missing.getLostDate())
-                            .etc(missing.getEtc())
-                            .reward(missing.getReward())
-                            .state(missing.getState())
-                            .pathUrl(missing.getPathUrl())
-                            .nickname(author.getNickname())
-                            .build()
+                    new MissingDTO(missing)
             );
         }
 
@@ -130,61 +118,53 @@ public class MissingService {
         return new MissingDTO(missing);
     }
 
-    public MissingDTO update(Author author, MissingRequestDTO missingRequestDTO, Long missingId, MultipartFile file) {
+    @Transactional
+    public MissingDTO update(
+            Author author,
+            MissingRequestDTO missingRequestDTO,
+            Long missingId) {
 
         Missing missing = missingRepository.findById(missingId).orElseThrow(() -> new CustomException(ErrorCode.MISSING_NOT_FOUND));
 
-        log.debug("missing : {}", missing);
-        log.debug("missing.name : {}", missing.getName());
+        String pathUrl = s3Upload(missingRequestDTO.getFile());
 
-        // 수정 시 유저 확인
-        long loginUserId = missingRequestDTO.getAuthor().getId();
+        missing.setName(missingRequestDTO.getName());
+        missing.setBreed(missingRequestDTO.getBreed());
+        missing.setGeo(missingRequestDTO.getGeo());
+        missing.setLocation(missingRequestDTO.getLocation());
+        missing.setColor(missingRequestDTO.getColor());
+        missing.setSerialNumber(missingRequestDTO.getSerialNumber());
+        missing.setGender(missingRequestDTO.isGender());
+        missing.setNeutered(missingRequestDTO.isNeutered());
+        missing.setAge(missingRequestDTO.getAge());
+        missing.setLostDate(missingRequestDTO.getLostDate());
+        missing.setEtc(missingRequestDTO.getEtc());
+        missing.setMissingState(missingRequestDTO.getMissingState());
+        missing.setReward(missingRequestDTO.getReward());
+        missing.setPathUrl(pathUrl);
 
-        if(author.getId() == loginUserId) {
-            missing.setName(missingRequestDTO.getName());
-            missing.setBreed(missingRequestDTO.getBreed());
-            missing.setGeo(missingRequestDTO.getGeo());
-            missing.setLocation(missingRequestDTO.getLocation());
-            missing.setColor(missingRequestDTO.getColor());
-            missing.setSerialNumber(missingRequestDTO.getSerialNumber());
-            missing.setGender(missingRequestDTO.isGender());
-            missing.setNeutered(missingRequestDTO.isNeutered());
-            missing.setAge(missingRequestDTO.getAge());
-            missing.setLostDate(missingRequestDTO.getLostDate());
-            missing.setEtc(missingRequestDTO.getEtc());
-            missing.setState(missingRequestDTO.getState());
-            missing.setReward(missingRequestDTO.getReward());
-            missing.setPathUrl(missingRequestDTO.getPathUrl());
-
-            s3Update(missing, file);
-
-            missingRepository.save(missing);
-        }
+        missingRepository.save(missing);
 
         return new MissingDTO(missing);
     }
 
+    @Transactional
     public String delete(Author author, Long missingId) {
         Missing missing = missingRepository.findById(missingId).orElseThrow(() -> new CustomException(ErrorCode.MISSING_NOT_FOUND));
 
-        Long loginUserId = missing.getAuthor().getId();
+        s3Delete(missing.getPathUrl());
+        missingRepository.delete(missing);
 
-        if (Objects.equals(author.getId(), loginUserId)) {
-            s3Delete(missing);
-            missingRepository.delete(missing);
-
-            return "신고글 삭제";
-        }
-
-        return "삭제 권한이 없습니다.";
+        return "신고글 삭제";
     }
 
     // s3 매서드
-    public GlobalResponse<String> s3Upload(
-            Missing missing,
+    public String s3Upload(
             MultipartFile file) {
+
+        String filename = getUuidFilename(file);
+
         try {
-            String filename = getUuidFilename(file);
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(dirName + "/" + filename)
@@ -193,41 +173,22 @@ public class MissingService {
 
             s3Client.putObject(putObjectRequest,
                     RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-
-            missing.setPathUrl(getS3FileUrl(filename));
+            //return getS3FileUrl(filename)
+//            missing.setPathUrl(getS3FileUrl(filename));
 
         } catch (IOException e) {
-            return GlobalResponse.error(ErrorCode.S3_UPLOAD_ERROR);
+            return new CustomException(ErrorCode.S3_UPLOAD_ERROR).toString();
         }
 
-        return GlobalResponse.success("업로드 성공");
+        return getS3FileUrl(filename);
     }
 
-    public GlobalResponse<String> s3Delete(Missing missing) {
-        try {
-            String fileName = getFileNameFromS3Url(missing.getPathUrl());
-            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(dirName + "/" + fileName)
-                    .build();
-            s3Client.deleteObject(deleteObjectRequest);
-            missing.setPathUrl(getS3FileUrl("defaultAvatar.jpg"));
-        } catch (Exception e) {
-            log.warn("Failed to delete old profile image", e);
-        }
-        return GlobalResponse.success("삭제 성공");
-    }
-
-    public GlobalResponse<String> s3Update(
-            Missing missing,
-            MultipartFile file) {
-
-        if (missing.getPathUrl() != null) {
-            s3Delete(missing);
-            s3Upload(missing, file);
-        }
-
-        return GlobalResponse.success("수정 성공");
+    public void s3Delete(String fileName) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(dirName + "/" + fileName)
+                .build();
+        s3Client.deleteObject(deleteObjectRequest);
     }
 
     private String getUuidFilename(MultipartFile file) {

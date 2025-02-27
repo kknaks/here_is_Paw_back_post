@@ -2,17 +2,18 @@ package com.ll.hereispaw.domain.missing.missing.entity;
 
 import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
 import com.ll.hereispaw.global.jpa.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Setter
@@ -45,14 +46,16 @@ public class Missing extends BaseEntity {
     private boolean gender;
     private boolean neutered;
     private int age;
-    private Timestamp lostDate;
+
+//    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
+    private LocalDateTime lostDate;
 
     @Column(columnDefinition = "TEXT")
     private String etc;
     private int reward;
-    private int state;
+    private int missingState;
 
-//    @NotNull
+    @NotNull
 //    @OneToMany
     private String pathUrl;
 

@@ -30,10 +30,14 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+
+    //postgreSQL & PostGIS
+    runtimeOnly("org.postgresql:postgresql")
+    implementation("org.hibernate:hibernate-spatial:6.2.13.Final")
 
     //websocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -58,6 +62,13 @@ dependencies {
 
     //swegger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+
+    //kafka
+    implementation("org.springframework.kafka:spring-kafka")
+    testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    //docker-compose
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 }
 
