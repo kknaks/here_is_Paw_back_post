@@ -1,5 +1,7 @@
 package com.ll.hereispaw.domain.find.find.entity;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -7,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +34,7 @@ public class FindPost {
     private String gender; // 성별
     private String etc; // 기타 특징
 
+    @Column(columnDefinition = "geometry(Point,4326)")
     private Point geo; // 좌표인데 타입 확인 필요
 
     private int age; // 나이

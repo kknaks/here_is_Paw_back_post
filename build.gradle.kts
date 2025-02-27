@@ -38,6 +38,7 @@ dependencies {
     //postgreSQL & PostGIS
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.hibernate:hibernate-spatial:6.2.13.Final")
+    implementation ("org.hibernate.orm:hibernate-spatial")
 
     //websocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -71,7 +72,7 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka-test")
 
     //docker-compose
-//    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 }
 
