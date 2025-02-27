@@ -24,10 +24,7 @@ public class ApiV1ChatMessageController {
     public GlobalResponse<ChatMessageDto> writeMessage(@PathVariable("chatRoomId") Long chatRoomId, @RequestBody CreateChatMessage createChatMessage, @LoginUser Member member){
         ChatMessage chatMessage = this.chatMessageService.writeMessage(chatRoomId, createChatMessage.getChatMessageId(), createChatMessage.getContent(), member);
         ChatMessageDto messages = new ChatMessageDto(chatMessage);
-
         simpMessagingTemplate.convertAndSend("/topic/api/v1/chat/"+ chatRoomId +"/messages", messages);
-        //simpMessagingTemplate.convertAndSend("/topic/chat/room/" + chatRoomId, messages);
-
         return GlobalResponse.success(messages);
     }
 }

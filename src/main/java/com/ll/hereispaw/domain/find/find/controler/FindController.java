@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.find.find.controler;
 
+import com.ll.hereispaw.domain.chat.chatRoom.service.ChatRoomService;
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.dto.FindWithPhotoRequest;
 import com.ll.hereispaw.domain.find.find.service.FindImageService;
@@ -22,6 +23,8 @@ public class FindController {
 
     private final FindService findService;
     private final FindImageService findImageService;
+    //채팅방 연동
+    private final ChatRoomService chatRoomService;
 
     // 유기견 발견 전체 조회
     @GetMapping
