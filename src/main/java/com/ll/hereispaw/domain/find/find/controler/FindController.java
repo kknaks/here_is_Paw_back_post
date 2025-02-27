@@ -70,5 +70,35 @@ public class FindController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/update/{postId}")
+    public ResponseEntity<String> updateReview(
+            @PathVariable("postId") Long postId,
+            @RequestBody FindWithPhotoRequest request) {
+
+        // 상태 0: 발견, 1: 보호, 2: 완료
+        int state = 0;
+
+        // Base64 -> URL 변환
+        String imageUrl = findImageService.saveBase64Image(request.getPath_url());
+
+        findService.updateFind(postId, request.getTitle(), request.getSituation(),
+                request.getBreed(), request.getGeo(), request.getLocation(),
+                request.getName(), request.getColor(), request.getEtc(), request.getGender(),
+                request.getAge(),
+                state, request.isNeutered(), request.getFind_date(),
+                request.getMember_id(), request.getShelter_id());
+
+        // 변환된 URL을 저장
+        String pathUrl = findService.updateFindPhoto(
+                imageUrl,
+                request.getMember_id(), postId
+        );
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "저장 완료");
+        response.put("findPostId", postId);
+        return ResponseEntity.ok("발견 게시글 수정 성공");
+    }
+
 
 }
