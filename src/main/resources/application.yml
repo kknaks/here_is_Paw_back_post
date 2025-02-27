@@ -39,6 +39,10 @@ spring:
       properties:
         spring.json.trusted.packages: com.ll.hereispaw.domain.noti.dto.kafka
         spring.json.use.type.headers: false
+logging:
+  level:
+    root: info
+    com.ll.hereispaw : debug
 springdoc:
   swagger-ui:
     path: /swagger-ui.html  # Swagger UI 경로
