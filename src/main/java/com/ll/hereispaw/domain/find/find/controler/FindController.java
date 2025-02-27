@@ -1,15 +1,10 @@
 package com.ll.hereispaw.domain.find.find.controler;
 
-import com.ll.hereispaw.domain.chat.chatRoom.dto.ChatRoomDto;
-import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.domain.chat.chatRoom.service.ChatRoomService;
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.dto.FindWithPhotoRequest;
 import com.ll.hereispaw.domain.find.find.service.FindImageService;
 import com.ll.hereispaw.domain.find.find.service.FindService;
-import com.ll.hereispaw.domain.member.member.entity.Member;
-import com.ll.hereispaw.global.globalDto.GlobalResponse;
-import com.ll.hereispaw.global.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,18 +73,35 @@ public class FindController {
         return ResponseEntity.ok(response);
     }
 
-    // 채팅방 연동
-    @PostMapping("/{postId}/chat")
-    public GlobalResponse<ChatRoomDto> Chat(@PathVariable("postId") Long postId, @LoginUser Member chatUser) {
-        FindDto findDto = findService.findById(postId);
+    @PutMapping("/update/{postId}")
+    public ResponseEntity<String> updateReview(
+            @PathVariable("postId") Long postId,
+            @RequestBody FindWithPhotoRequest request) {
 
-        // 게시글 작성자 조회
-        Long targetUserId = findDto.getMember_id();
+        // 상태 0: 발견, 1: 보호, 2: 완료
+        int state = 0;
 
-        // 채팅방 생성 또는 조회
-        ChatRoom chatRoom = chatRoomService.createRoomOrView(chatUser, targetUserId);
-        ChatRoomDto chatRoomDto = new ChatRoomDto(chatRoom);
+        // Base64 -> URL 변환
+        String imageUrl = findImageService.saveBase64Image(request.getPath_url());
 
-        return GlobalResponse.success(chatRoomDto);
+        findService.updateFind(postId, request.getTitle(), request.getSituation(),
+                request.getBreed(), request.getGeo(), request.getLocation(),
+                request.getName(), request.getColor(), request.getEtc(), request.getGender(),
+                request.getAge(),
+                state, request.isNeutered(), request.getFind_date(),
+                request.getMember_id(), request.getShelter_id());
+
+        // 변환된 URL을 저장
+        String pathUrl = findService.updateFindPhoto(
+                imageUrl,
+                request.getMember_id(), postId
+        );
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "저장 완료");
+        response.put("findPostId", postId);
+        return ResponseEntity.ok("발견 게시글 수정 성공");
     }
+
+
 }
