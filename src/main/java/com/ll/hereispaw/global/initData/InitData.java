@@ -1,12 +1,10 @@
 package com.ll.hereispaw.global.initData;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.domain.member.member.service.MemberService;
 import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
 import com.ll.hereispaw.domain.missing.missing.dto.request.MissingRequestDTO;
-import com.ll.hereispaw.domain.missing.missing.dto.response.MissingDTO;
 import com.ll.hereispaw.domain.missing.missing.service.MissingService;
-import com.ll.hereispaw.domain.member.member.service.MemberService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -37,9 +35,9 @@ public class InitData {
             @Override
             public void run (ApplicationArguments args) {
                 if (memberService.count() > 0)  return;
-                Member member1 = memberService.join("user1", "1234", "유저1").getData();
-                Member member2 =memberService.join("user1", "1234", "유저1").getData();
-                Member member3 =memberService.join("user1", "1234", "유저1").getData();
+                Member member1 = memberService.signup("user1", "1234", "유저1", "");
+                Member member2 =memberService.signup("user2", "1234", "유저2", "");
+                Member member3 =memberService.signup("user3", "1234", "유저3", "");
 
                 Author author1 = missingService.of(member1);
                 Author author2 = missingService.of(member2);
