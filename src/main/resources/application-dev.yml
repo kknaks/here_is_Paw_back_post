@@ -10,13 +10,13 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false # OSIV 설정 끄기
-
 logging:
   level:
     root: info
-    com.ll.hereispaw : debug
+    com.ll.hereispaw : debug, warn
 custom:
   dev:
     cookieDomain: localhost
     frontUrl: "http://${custom.dev.cookieDomain}:5173"
     backUrl: "http://${custom.dev.cookieDomain}:${server.port}"
+

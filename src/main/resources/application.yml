@@ -7,14 +7,6 @@ spring:
   profiles:
     active: dev
     include: secret
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
   servlet:
     multipart:
       enabled: true
@@ -52,8 +44,13 @@ springdoc:
     path: /swagger-ui.html  # Swagger UI 경로
   api-docs:
     path: /api-docs        # API 문서 경로
-logging:
-  level:
-    root: info
-    com.ll.hereispaw : debug, warn
-
+custom:
+  prod:
+    cookieDomain: pawpaw.kknaks.site
+    frontUrl: "https://www.${custom.prod.cookieDomain}"
+    backUrl: "https://api.${custom.prod.cookieDomain}"
+  site:
+    name: "StockNote"
+    cookieDomain: "${custom.dev.cookieDomain}"
+    frontUrl: "${custom.dev.frontUrl}"
+    backUrl: "${custom.dev.backUrl}"
