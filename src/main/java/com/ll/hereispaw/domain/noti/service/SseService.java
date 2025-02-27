@@ -64,48 +64,49 @@ public class SseService {
     return emitter;
   }
 
-  public void sendNoti(String userId, String eventName, NotiRequest notiRequest){
-    SseEmitter emitter = emitters.get(userId);
+  public void sendNoti(Long userId, String eventName, Noti noti){
+    String userIdStr = String.valueOf(userId);
+    SseEmitter emitter = emitters.get(userIdStr);
 
     if (emitter != null) {
       try {
         emitter.send(SseEmitter.event()
             .name(eventName)
-            .data(notiRequest));
+            .data(noti));
 
       } catch (IOException e) {
-        emitters.remove(userId);
+        emitters.remove(userIdStr);
         emitter.completeWithError(e);
       }
     }
   }
 
-  private void sendUnreadNoti(String userId, SseEmitter emitter) throws IOException {
-    List<Noti> unreadNotifications = notiRepository.findByUserIdAndReadOrderByCreatedAtDesc(userId, false);
-
-    for (Noti noti : unreadNotifications) {
-      emitter.send(SseEmitter.event()
-          .name(noti.getEventName())
-          .data(noti.getNotiRequest())
-          .id(String.valueOf(noti.getId())));
-      log.debug("Unread noti sent: {}", noti.getId());
-      // 전송 후 읽음 처리
-      noti.markAsRead();
-    }
-
-    // 일괄 저장
-    if (!unreadNotifications.isEmpty()) {
-      notiRepository.saveAll(unreadNotifications);
-    }
-  }
-
-  public void sendNotificationToAll(String eventName, NotiRequest data) {
-    emitters.forEach((userId, emitter) -> {
-      sendNoti(userId, eventName, data);
-    });
-  }
-
-  public void removeEmitter(String userId) {
-    emitters.remove(userId);
-  }
+//  private void sendUnreadNoti(String userId, SseEmitter emitter) throws IOException {
+//    List<Noti> unreadNotifications = notiRepository.findByUserIdAndReadOrderByCreatedAtDesc(userId, false);
+//
+//    for (Noti noti : unreadNotifications) {
+//      emitter.send(SseEmitter.event()
+//          .name(noti.getEventName())
+//          .data(noti.getNotiRequest())
+//          .id(String.valueOf(noti.getId())));
+//      log.debug("Unread noti sent: {}", noti.getId());
+//      // 전송 후 읽음 처리
+//      noti.markAsRead();
+//    }
+//
+//    // 일괄 저장
+//    if (!unreadNotifications.isEmpty()) {
+//      notiRepository.saveAll(unreadNotifications);
+//    }
+//  }
+//
+//  public void sendNotificationToAll(String eventName, NotiRequest data) {
+//    emitters.forEach((userId, emitter) -> {
+//      sendNoti(userId, eventName, data);
+//    });
+//  }
+//
+//  public void removeEmitter(String userId) {
+//    emitters.remove(userId);
+//  }
 }

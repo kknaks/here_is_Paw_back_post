@@ -1,9 +1,10 @@
 package com.ll.hereispaw.domain.noti.entity;
 
+import com.ll.hereispaw.domain.member.member.entity.Member;
+import com.ll.hereispaw.domain.noti.person.entity.Person;
 import com.ll.hereispaw.global.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,19 @@ import jakarta.persistence.*;
 @SuperBuilder
 public class Noti extends BaseEntity {
 
-  private String userId;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "sender_id")
+  private Person sender;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "receiver_id")
+  private Person receiver;
 
   private String eventName;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  private NotiRequest notiRequest;
+  private String message;
+
+  private Long postId;
 
   private boolean read;
 

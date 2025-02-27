@@ -1,5 +1,5 @@
-package com.ll.hereispaw.domain.noti.dto.kafka.config;
-import com.ll.hereispaw.domain.noti.dto.kafka.dto.ImageMatchResponseDto;
+package com.ll.hereispaw.domain.noti.kafka.config;
+import com.ll.hereispaw.domain.noti.kafka.dto.ImageMatchResponseDto;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -28,12 +28,10 @@ public class KafkaConsumerConfig {
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-    // 그룹 ID 설정 제거 - 각 리스너에서 직접 지정
-
     // JsonDeserializer 설정
     JsonDeserializer<ImageMatchResponseDto> jsonDeserializer = new JsonDeserializer<>(
         ImageMatchResponseDto.class);
-    jsonDeserializer.addTrustedPackages("com.ll.hereispaw.domain.noti.dto.kafka");
+    jsonDeserializer.addTrustedPackages("com.ll.hereispaw.domain.noti.kafka");
 
     // TypeMapping 이슈를 피하기 위한 설정
     jsonDeserializer.setUseTypeHeaders(false);

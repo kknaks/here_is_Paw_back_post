@@ -1,7 +1,9 @@
 package com.ll.hereispaw.domain.noti.eventListener;
 
-import com.ll.hereispaw.domain.noti.dto.kafka.dto.ImageMatchResponseDto;
+import com.ll.hereispaw.domain.noti.kafka.dto.ImageMatchDto;
+import com.ll.hereispaw.domain.noti.kafka.dto.ImageMatchResponseDto;
 import com.ll.hereispaw.domain.noti.service.NotiService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotiEventListener {
 
   private final NotiService notiService;
+
+  private static final String FINDING_TO_MISSING = "finding_to_missing";
+  private static final String MISSING_TO_FINDING = "missing_to_finding";
 
   @KafkaListener(
       topics = "dog-face-compare-response",
@@ -31,11 +36,20 @@ public class NotiEventListener {
       responseDto.getMatches().forEach(match -> {
         log.info("Match: imageId={}, postId={}, similarity={}",
             match.getImageId(), match.getPostId(), match.getSimilarity());
-
-//        // 여기서 사용자에게 알림을 보내는 로직 추가
-//        Long userId = match.getPostId(); // 예시: postId를 userId로 사용
-//        notiService.createImageMatchNoti(userId, match);
       });
+
+      List<ImageMatchDto> matches = responseDto.getMatches();
+
+      switch (responseDto.getMessage()){
+        case FINDING_TO_MISSING -> {
+          notiService.sendToMissingNoti(responseDto.getOriginMemberId(), responseDto.getOriginPostId(), matches);
+        }
+        case MISSING_TO_FINDING -> {
+          notiService.sendToFindingNoti(responseDto.getOriginMemberId(), matches);
+        }
+      }
+
+
     } else {
       log.warn("Image match processing failed with status: {}", responseDto.getStatus());
     }

@@ -2,6 +2,7 @@ package com.ll.hereispaw.domain.noti.controller;
 
 import com.ll.hereispaw.domain.member.member.entity.Member;
 import com.ll.hereispaw.domain.noti.entity.Noti;
+import com.ll.hereispaw.domain.noti.person.entity.Person;
 import com.ll.hereispaw.domain.noti.service.SseService;
 import com.ll.hereispaw.global.webMvc.LoginUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/sse")
+@RequestMapping("/api/v1/sse")
 @Tag(name = "SSE API", description = "SSE API")
 public class SseController {
   private final SseService sseService;
@@ -31,10 +32,10 @@ public class SseController {
     return ResponseEntity.ok(sseService.add(memberId.toString()));
   }
 
-  @GetMapping(value = "/disconnect/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public ResponseEntity<Void> remove(@PathVariable String userId) {
-    sseService.removeEmitter(userId);
-    return ResponseEntity.ok().build();
-  }
+//  @GetMapping(value = "/disconnect/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//  public ResponseEntity<Void> remove(@PathVariable String userId) {
+//    sseService.removeEmitter(userId);
+//    return ResponseEntity.ok().build();
+//  }
 
 }
