@@ -165,7 +165,6 @@ public class MemberService {
             }
 
             String fileName = uploadImageToS3(modifyRequest.profileImage());
-            log.debug("파일 네임 {}", fileName);
             member.setAvatar(fileName);
         }
 
@@ -245,7 +244,6 @@ public class MemberService {
     }
 
     private void deleteImageToS3(String fileName) {
-        log.debug("동작함");
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(dirName + "/" + fileName)

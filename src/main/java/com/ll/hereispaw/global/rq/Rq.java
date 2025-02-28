@@ -65,7 +65,7 @@ public class Rq {
                 .domain("localhost")
                 .sameSite("Strict")
                 .secure(true)
-//                .httpOnly(true)
+                .httpOnly(true)
                 .httpOnly(false)
                 .build();
         resp.addHeader("Set-Cookie", cookie.toString());
