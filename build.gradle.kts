@@ -35,6 +35,9 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
+    //actuator 설정
+    implementation ("org.springframework.boot:spring-boot-starter-actuator")
+
     //postgreSQL & PostGIS
 //    runtimeOnly("org.postgresql:postgresql")
 //    implementation("org.hibernate.orm:hibernate-spatial:6.6.5.Final")

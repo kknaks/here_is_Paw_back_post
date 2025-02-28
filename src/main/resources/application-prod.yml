@@ -29,6 +29,12 @@ spring:
         format_sql: true
     open-in-view: false # OSIV 설정 끄기
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health  # 이 부분 추가
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html  # Swagger UI 경로
