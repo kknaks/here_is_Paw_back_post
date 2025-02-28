@@ -43,6 +43,7 @@ logging:
   level:
     root: info
     com.ll.hereispaw : debug
+    org.hibernate.spatial: debug
 springdoc:
   swagger-ui:
     path: /swagger-ui.html  # Swagger UI 경로

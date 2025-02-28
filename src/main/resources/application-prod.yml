@@ -20,7 +20,7 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me    # 사용자 정보 조회 URI
             user-name-attribute: id    # 사용자 정보에서 사용자 이름에 해당하는 속성
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG10Dialect
     hibernate:
       ddl-auto: update
     show-sql: true

@@ -9,9 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.locationtech.jts.geom.Point;
+
 
 import java.time.LocalDateTime;
+import org.locationtech.jts.geom.Point;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 

@@ -53,7 +53,7 @@ public class FindService {
         findPost.setTitle(title);
         findPost.setSituation(situation);
         findPost.setBreed(breed);
-        findPost.setGeo(geo);
+//        findPost.setGeo(geo);
         findPost.setLocation(location);
         findPost.setName(name);
         findPost.setColor(color);
@@ -112,7 +112,7 @@ public class FindService {
                     FindDto.builder()
                             .id(e.getId())
                             .breed(e.getBreed())
-                            .geo(e.getGeo())
+//                            .geo(e.getGeo())
                             .location(e.getLocation())
                             .name(e.getName())
                             .color(e.getColor())
@@ -148,7 +148,7 @@ public class FindService {
                 .etc(findPost.getEtc())
                 .find_date(findPost.getFind_date())
                 .gender(findPost.getGender())
-                .geo(findPost.getGeo())
+//                .geo(findPost.getGeo())
                 .location(findPost.getLocation())
                 .member_id(findPost.getMember_id())
                 .name(findPost.getName())
@@ -184,7 +184,7 @@ public class FindService {
         findPost.setTitle(title);
         findPost.setSituation(situation);
         findPost.setBreed(breed);
-        findPost.setGeo(geo);
+//        findPost.setGeo(geo);
         findPost.setLocation(location);
         findPost.setName(name);
         findPost.setColor(color);
