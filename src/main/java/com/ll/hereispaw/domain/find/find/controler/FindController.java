@@ -1,15 +1,10 @@
 package com.ll.hereispaw.domain.find.find.controler;
 
-import com.ll.hereispaw.domain.chat.chatRoom.dto.ChatRoomDto;
-import com.ll.hereispaw.domain.chat.chatRoom.entity.ChatRoom;
 import com.ll.hereispaw.domain.chat.chatRoom.service.ChatRoomService;
 import com.ll.hereispaw.domain.find.find.dto.FindDto;
 import com.ll.hereispaw.domain.find.find.dto.FindWithPhotoRequest;
 import com.ll.hereispaw.domain.find.find.service.FindImageService;
 import com.ll.hereispaw.domain.find.find.service.FindService;
-import com.ll.hereispaw.domain.member.member.entity.Member;
-import com.ll.hereispaw.global.globalDto.GlobalResponse;
-import com.ll.hereispaw.global.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,7 +102,7 @@ public class FindController {
         response.put("findPostId", postId);
         return ResponseEntity.ok("발견 게시글 수정 성공");
     }
-
+/*
     @PostMapping("/{postId}/chat")
     public GlobalResponse<ChatRoomDto> Chat(@PathVariable("postId") Long postId, @LoginUser Member chatUser) {
         FindDto findDto = findService.findById(postId);
@@ -121,4 +116,5 @@ public class FindController {
 
         return GlobalResponse.success(chatRoomDto);
     }
+    */
 }
