@@ -13,8 +13,8 @@ class ServiceManager:
         self.socat_port: int = socat_port
         self.sleep_duration: int = sleep_duration
         self.services: Dict[str, int] = {
-            'here_is_paw_1': 8090,
-            'here_is_paw_2': 8091
+            'here_is_paw_1': 8082,
+            'here_is_paw_2': 8083
         }
         self.current_name: Optional[str] = None
         self.current_port: Optional[int] = None
