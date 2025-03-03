@@ -78,7 +78,7 @@ public class MissingService {
                         .gender(missingRequestDto.getGender())
                         .neutered(missingRequestDto.getNeutered())
                         .age(missingRequestDto.getAge())
-//                        .lostDate(missingRequestDto.getLostDate())
+                        .lostDate(missingRequestDto.getLostDate())
                         .etc(missingRequestDto.getEtc())
                         .reward(missingRequestDto.getReward())
                         .missingState(missingRequestDto.getMissingState())
