@@ -75,8 +75,8 @@ public class MissingService {
                         .location(missingRequestDto.getLocation())
                         .color(missingRequestDto.getColor())
                         .serialNumber(missingRequestDto.getSerialNumber())
-                        .gender(missingRequestDto.isGender())
-                        .neutered(missingRequestDto.isNeutered())
+                        .gender(missingRequestDto.getGender())
+                        .neutered(missingRequestDto.getNeutered())
                         .age(missingRequestDto.getAge())
 //                        .lostDate(missingRequestDto.getLostDate())
                         .etc(missingRequestDto.getEtc())
@@ -134,8 +134,8 @@ public class MissingService {
         missing.setLocation(missingRequestDTO.getLocation());
         missing.setColor(missingRequestDTO.getColor());
         missing.setSerialNumber(missingRequestDTO.getSerialNumber());
-        missing.setGender(missingRequestDTO.isGender());
-        missing.setNeutered(missingRequestDTO.isNeutered());
+        missing.setGender(missingRequestDTO.getGender());
+        missing.setNeutered(missingRequestDTO.getNeutered());
         missing.setAge(missingRequestDTO.getAge());
         missing.setLostDate(missingRequestDTO.getLostDate());
         missing.setEtc(missingRequestDTO.getEtc());

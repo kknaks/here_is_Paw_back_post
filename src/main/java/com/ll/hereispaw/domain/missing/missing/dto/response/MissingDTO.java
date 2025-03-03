@@ -28,8 +28,8 @@ public class MissingDTO {
 
     private String color;
     private String serialNumber;
-    private boolean gender;
-    private boolean neutered;
+    private int gender;
+    private int neutered;
     private int age;
     private LocalDateTime lostDate;
     private String etc;
@@ -46,8 +46,8 @@ public class MissingDTO {
         location = missing.getLocation();
         color = missing.getColor();
         serialNumber = missing.getSerialNumber();
-        gender = missing.isGender();
-        neutered = missing.isNeutered();
+        gender = missing.getGender();
+        neutered = missing.getNeutered();
         age = missing.getAge();
         lostDate = missing.getLostDate();
         etc = missing.getEtc();

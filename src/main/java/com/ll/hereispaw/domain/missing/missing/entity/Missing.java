@@ -9,11 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Entity
 @Setter
@@ -43,8 +40,8 @@ public class Missing extends BaseEntity {
 
     @Column(length = 15)
     private String serialNumber;
-    private boolean gender;
-    private boolean neutered;
+    private int gender;
+    private int neutered;
     private int age;
 
 //    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
