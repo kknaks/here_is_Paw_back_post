@@ -52,7 +52,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         if (parameter.getParameterType().equals(Author.class)) {
 
-            return new Author(loginUser.getNickname());
+            return new Author(loginUser.getId(), loginUser.getNickname());
         }
 
         return loginUser;

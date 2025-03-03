@@ -1,23 +1,19 @@
 package com.ll.hereispaw.domain.missing.missing.dto.response;
 
-import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
 import com.ll.hereispaw.domain.missing.missing.entity.Missing;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-public class MissingDTO {
+public class MissingResponseDto {
     /**
      * 이름, 견종, 유기견 이미지, 지역, 좌표
      * 색상, 동물 등록 번호, 성별, 중성화 유무, 나이, 실종 날짜, 기타(특징), 사례금
      */
+    private Long id;
+
     // 필수값
     private String name;
     private String breed;
@@ -36,7 +32,8 @@ public class MissingDTO {
     private int reward;
     private int missingState;
 
-    public MissingDTO(Missing missing) {
+    public MissingResponseDto(Missing missing) {
+        id = missing.getId();
         nickname = missing.getAuthor().getNickname();
         pathUrl = missing.getPathUrl();
 
