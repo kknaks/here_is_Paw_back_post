@@ -2,7 +2,7 @@ package com.ll.hereispaw.domain.missing.missing.controller;
 
 import com.ll.hereispaw.domain.missing.Auhtor.entity.Author;
 import com.ll.hereispaw.domain.missing.missing.dto.request.MissingRequestDTO;
-import com.ll.hereispaw.domain.missing.missing.dto.response.MissingDTO;
+import com.ll.hereispaw.domain.missing.missing.dto.response.MissingResponseDto;
 import com.ll.hereispaw.domain.missing.missing.service.MissingService;
 import com.ll.hereispaw.global.error.ErrorCode;
 import com.ll.hereispaw.global.globalDto.GlobalResponse;
@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,13 +22,13 @@ public class ApiV1MissingController {
 
     // 전체 조회
     @GetMapping
-    public GlobalResponse<List<MissingDTO>> lists() {
+    public GlobalResponse<List<MissingResponseDto>> lists() {
         return GlobalResponse.success(missingService.list());
     }
 
     // 작성
-    @PostMapping(value = "/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public GlobalResponse<MissingDTO> write(
+    @PostMapping(value = "/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    public GlobalResponse<MissingResponseDto> write(
             @LoginUser Author author,
             @Valid @ModelAttribute MissingRequestDTO missingRequestDto) {
         return GlobalResponse.success(missingService.write(author, missingRequestDto));
@@ -37,14 +36,14 @@ public class ApiV1MissingController {
 
     // 단건 조회
     @GetMapping("/{missingId}")
-    public GlobalResponse<MissingDTO> detail(
+    public GlobalResponse<MissingResponseDto> detail(
             @PathVariable("missingId") Long missingId) {
         return GlobalResponse.success(missingService.findById(missingId));
     }
 
     // 수정
     @PatchMapping("/{missingId}")
-    public GlobalResponse<MissingDTO> update(
+    public GlobalResponse<MissingResponseDto> update(
             @LoginUser Author author,
             @Valid @ModelAttribute MissingRequestDTO missingRequestDto,
             @PathVariable("missingId") Long missingId) {
