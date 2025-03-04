@@ -1,15 +1,18 @@
 package com.ll.hereispaw.domain.find.find.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FindDto {
     // 기존 FindRequest 필드
     private Long id;
@@ -22,11 +25,12 @@ public class FindDto {
     private String color; // 색상
     private String etc; // 기타 특징
 
-    private Point geo; // 좌표 (타입 확인 필요)
+    private Double x;  // Point.getX() 대신 사용
+    private Double y;  // Point.getY() 대신 사용
+
     private int gender; // 성별
     private int age; // 나이
     private int neutered; // 중성화 유무
-
 
     private LocalDateTime find_date; // 발견 시간
 

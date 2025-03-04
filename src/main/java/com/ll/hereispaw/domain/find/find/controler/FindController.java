@@ -6,8 +6,9 @@ import com.ll.hereispaw.domain.find.find.dto.FindRequest;
 import com.ll.hereispaw.domain.find.find.dto.FindWithPhotoRequest;
 import com.ll.hereispaw.domain.find.find.service.FindImageService;
 import com.ll.hereispaw.domain.find.find.service.FindService;
+import com.ll.hereispaw.standard.Ut.GeoUt;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,14 +54,11 @@ public class FindController {
         // 상태 0: 발견, 1: 보호, 2: 완료
         int state = 0;
 
-        System.out.println("X : " + request.getX());
-        System.out.println("Y : " + request.getY());
-
         double x = request.getX();
         double y = request.getY();
 
         // Point 객체 생성
-        Point geo = new Point(x, y);
+        Point geo = GeoUt.createPoint(x, y);
 
         // saveFind 호출하여 새롭게 저장하고 id 반환
         Long findPostId = findService.saveFind(
@@ -78,30 +76,24 @@ public class FindController {
     @PutMapping("/update/{postId}")
     public ResponseEntity<String> updateReview(
             @PathVariable("postId") Long postId,
-            @RequestBody FindWithPhotoRequest request) {
+            @ModelAttribute FindRequest request,  // Point 필드가 없는 DTO 사용
+            @RequestPart("file") MultipartFile file) {
 
         // 상태 0: 발견, 1: 보호, 2: 완료
         int state = 0;
 
-        // Base64 -> URL 변환
-        String imageUrl = findImageService.saveBase64Image(request.getPath_url());
+        double x = request.getX();
+        double y = request.getY();
+
+        // Point 객체 생성
+        Point geo = GeoUt.createPoint(x, y);
 
         findService.updateFind(postId, request.getTitle(), request.getSituation(),
-                request.getBreed(), request.getGeo(), request.getLocation(),
+                request.getBreed(), geo, request.getLocation(),
                 request.getName(), request.getColor(), request.getEtc(), request.getGender(),
                 request.getAge(),
                 state, request.getNeutered(), request.getFind_date(),
-                request.getMember_id(), request.getShelter_id());
-
-        // 변환된 URL을 저장
-        String pathUrl = findService.updateFindPhoto(
-                imageUrl,
-                request.getMember_id(), postId
-        );
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "저장 완료");
-        response.put("findPostId", postId);
+                request.getMember_id(), request.getShelter_id(), file);
         return ResponseEntity.ok("발견 게시글 수정 성공");
     }
 /*

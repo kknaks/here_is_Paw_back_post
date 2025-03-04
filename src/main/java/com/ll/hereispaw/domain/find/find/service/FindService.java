@@ -6,15 +6,12 @@ import com.ll.hereispaw.domain.find.find.entity.FindPost;
 import com.ll.hereispaw.domain.find.find.entity.Photo;
 import com.ll.hereispaw.domain.find.find.repository.FindPhotoRepository;
 import com.ll.hereispaw.domain.find.find.repository.FindRepository;
-import com.ll.hereispaw.domain.missing.missing.entity.Missing;
-import com.ll.hereispaw.global.error.ErrorCode;
 import com.ll.hereispaw.global.globalDto.GlobalResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.processing.Find;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,26 +110,27 @@ public class FindService {
     public List<FindDto> findAll() {
         List<FindDto> findDtos = new ArrayList<>();
         findRepository.findAll().forEach(e -> {
-            // find_post_id를 이용해 첫 번째 이미지 URL 가져오기
+            FindDto dto = FindDto.builder()
+                    .id(e.getId())
+                    .title(e.getTitle())
+                    .situation(e.getSituation())
+                    .breed(e.getBreed())
+                    .x(e.getGeo() != null ? e.getGeo().getX() : null)
+                    .y(e.getGeo() != null ? e.getGeo().getY() : null)
+                    .location(e.getLocation())
+                    .name(e.getName())
+                    .color(e.getColor())
+                    .gender(e.getGender())
+                    .etc(e.getEtc())
+                    .age(e.getAge())
+                    .neutered(e.getNeutered())
+                    .find_date(e.getFind_date())
+                    .member_id(e.getMember_id())
+                    .shelter_id(e.getShelter_id())
+                    .path_url(e.getPath_url())
+                    .build();
 
-            findDtos.add(
-                    FindDto.builder()
-                            .id(e.getId())
-                            .breed(e.getBreed())
-                            .geo(e.getGeo())
-                            .location(e.getLocation())
-                            .name(e.getName())
-                            .color(e.getColor())
-                            .gender(e.getGender())
-                            .etc(e.getEtc())
-                            .age(e.getAge())
-                            .neutered(e.getNeutered())
-                            .find_date(e.getFind_date())
-                            .member_id(e.getMember_id())
-                            .shelter_id(e.getShelter_id())
-                            .path_url(e.getPath_url()) // 이미지 URL 추가
-                            .build()
-            );
+            findDtos.add(dto);
         });
 
         return findDtos;
@@ -152,7 +150,8 @@ public class FindService {
                 .etc(findPost.getEtc())
                 .find_date(findPost.getFind_date())
                 .gender(findPost.getGender())
-                .geo(findPost.getGeo())
+                .x(findPost.getGeo().getX())
+                .y(findPost.getGeo().getY())
                 .location(findPost.getLocation())
                 .member_id(findPost.getMember_id())
                 .name(findPost.getName())
@@ -180,7 +179,8 @@ public class FindService {
             int neutered,
             LocalDateTime find_date,
             Long member_id,
-            Long shelter_id
+            Long shelter_id,
+            MultipartFile file
     ) {
         FindPost findPost = findRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -203,27 +203,9 @@ public class FindService {
 
         FindPost savedPost = findRepository.save(findPost);
 
+        String file_path = s3Upload(savedPost, file);
+
         return "수정 완료";
-    }
-
-    public String updateFindPhoto(String path_url, Long member_id, Long postId) {
-        Photo photo = findPhotoRepository.findByPostId(postId);
-
-        photo.setPath_url(path_url);
-        photo.setMember_id(member_id);
-        photo.setPostId(postId);
-
-        Photo savedPhoto = findPhotoRepository.save(photo);
-
-        //카프카 메시지 발행
-//        DogFaceRequestDto dogFaceRequestDto = DogFaceRequestDto.builder()
-//                .type("save")
-//                .image(path_url)
-//                .postType(POST_TYPE)
-//                .postId(postId)
-//                .build();
-//        kafkaTemplate.send("dog-face-request", dogFaceRequestDto);
-        return "사진 수정 완료";
     }
 
     // s3 매서드

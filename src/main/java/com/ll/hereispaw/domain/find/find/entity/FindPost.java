@@ -2,22 +2,19 @@ package com.ll.hereispaw.domain.find.find.entity;
 
 import com.ll.hereispaw.global.base.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
+@Table(name = "find_post")
 public class FindPost extends BaseEntity {
 
     private String title; // 글 제목
