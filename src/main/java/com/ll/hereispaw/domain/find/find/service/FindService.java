@@ -40,10 +40,10 @@ public class FindService {
             String name,
             String color,
             String etc,
-            String gender,
+            int gender,
             int age,
             int state,
-            boolean neutered,
+            int neutered,
             LocalDateTime find_date,
             Long member_id,
             Long shelter_id
@@ -119,7 +119,7 @@ public class FindService {
                             .gender(e.getGender())
                             .etc(e.getEtc())
                             .age(e.getAge())
-                            .neutered(e.isNeutered())
+                            .neutered(e.getNeutered())
                             .find_date(e.getFind_date())
                             .member_id(e.getMember_id())
                             .shelter_id(e.getShelter_id())
@@ -152,7 +152,7 @@ public class FindService {
                 .location(findPost.getLocation())
                 .member_id(findPost.getMember_id())
                 .name(findPost.getName())
-                .neutered(findPost.isNeutered())
+                .neutered(findPost.getNeutered())
                 .path_url(path_url)
                 .member_id(findPost.getMember_id())
                 .build();
@@ -170,10 +170,10 @@ public class FindService {
             String name,
             String color,
             String etc,
-            String gender,
+            int gender,
             int age,
             int state,
-            boolean neutered,
+            int neutered,
             LocalDateTime find_date,
             Long member_id,
             Long shelter_id

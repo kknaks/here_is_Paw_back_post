@@ -1,5 +1,6 @@
 package com.ll.hereispaw.domain.find.find.entity;
 
+import com.ll.hereispaw.global.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,11 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FindPost {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @EqualsAndHashCode.Include
-    private Long id;
+public class FindPost extends BaseEntity {
 
     private String title; // 글 제목
     private String situation; // 발견 상황
@@ -29,15 +26,15 @@ public class FindPost {
     private String location; // 지역
     private String name; // 이름
     private String color; // 색상
-    private String gender; // 성별
     private String etc; // 기타 특징
 
     private Point geo; // 좌표인데 타입 확인 필요
 
+    private int gender; // 성별
     private int age; // 나이
     private int state; // 상태
 
-    private boolean neutered; // 중성화 유무
+    private int neutered; // 중성화 유무
 
     private LocalDateTime find_date; // 발견 시간
 

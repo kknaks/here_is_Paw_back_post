@@ -56,7 +56,7 @@ public class FindController {
                 request.getBreed(), request.getGeo(), request.getLocation(),
                 request.getName(), request.getColor(), request.getEtc(), request.getGender(),
                 request.getAge(),
-                state, request.isNeutered(), request.getFind_date(),
+                state, request.getNeutered(), request.getFind_date(),
                 request.getMember_id(), request.getShelter_id()
         );
 
@@ -88,7 +88,7 @@ public class FindController {
                 request.getBreed(), request.getGeo(), request.getLocation(),
                 request.getName(), request.getColor(), request.getEtc(), request.getGender(),
                 request.getAge(),
-                state, request.isNeutered(), request.getFind_date(),
+                state, request.getNeutered(), request.getFind_date(),
                 request.getMember_id(), request.getShelter_id());
 
         // 변환된 URL을 저장
