@@ -122,7 +122,7 @@ public class InitData {
 
                 String[] findColors = {"황금색", "하얀색", "갈색", "하얀색", "회색/흰색"};
 
-                String[] genders = {"수컷", "암컷", "수컷", "암컷", "수컷"};
+                int[] genders = {1, 2, 1, 2, 1};
 
                 String[] etcs = {
                         "체격이 크고 온순한 성격, 목줄 흔적 있음",
@@ -134,7 +134,7 @@ public class InitData {
 
                 int[] ages = {3, 2, 4, 1, 5};
 
-                boolean[] neutered = {true, false, true, false, true};
+                int[] neutered = {1, 2, 1, 2, 1};
 
                 String[] imageUrls = {
                         "https://paw-bucket-1.s3.ap-northeast-2.amazonaws.com/profile-img/defaultAvatar.jpg",

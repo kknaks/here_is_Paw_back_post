@@ -33,13 +33,14 @@ public class FindPost extends BaseEntity {
     private int gender; // 성별
     private int age; // 나이
     private int state; // 상태
-
     private int neutered; // 중성화 유무
 
     private LocalDateTime find_date; // 발견 시간
 
     private Long member_id; // 신고한 회원 id
     private Long shelter_id; // 보호소 id
+
+    private String path_url;
 
     public FindPost() {
 
