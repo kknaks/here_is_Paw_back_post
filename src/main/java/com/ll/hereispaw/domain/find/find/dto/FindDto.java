@@ -1,18 +1,18 @@
 package com.ll.hereispaw.domain.find.find.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.locationtech.jts.geom.Point;
+
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @Setter
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class FindDto {
     // 기존 FindRequest 필드
     private Long id;
