@@ -107,34 +107,7 @@ public class FindService {
         return savedPost.getId(); // 저장된 find_post_id 반환
     }
 
-    public List<FindDto> findAll() {
-        List<FindDto> findDtos = new ArrayList<>();
-        findRepository.findAll().forEach(e -> {
-            FindDto dto = FindDto.builder()
-                    .id(e.getId())
-                    .title(e.getTitle())
-                    .situation(e.getSituation())
-                    .breed(e.getBreed())
-                    .x(e.getGeo() != null ? e.getGeo().getX() : null)
-                    .y(e.getGeo() != null ? e.getGeo().getY() : null)
-                    .location(e.getLocation())
-                    .name(e.getName())
-                    .color(e.getColor())
-                    .gender(e.getGender())
-                    .etc(e.getEtc())
-                    .age(e.getAge())
-                    .neutered(e.getNeutered())
-                    .find_date(e.getFind_date())
-                    .member_id(e.getMember_id())
-                    .shelter_id(e.getShelter_id())
-                    .path_url(e.getPath_url())
-                    .build();
 
-            findDtos.add(dto);
-        });
-
-        return findDtos;
-    }
 
     public FindDto findById(Long postId) {
 
@@ -203,9 +176,64 @@ public class FindService {
 
         FindPost savedPost = findRepository.save(findPost);
 
-        String file_path = s3Upload(savedPost, file);
+        String file_path = s3Upload(findPost, file);
 
         return "수정 완료";
+    }
+
+    // 발견 신고 삭제
+    public void deleteFind(Long postId) {
+        FindPost findPost = findRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
+
+        s3Delete(findPost);
+
+        findRepository.delete(findPost);
+
+    }
+
+    public List<FindDto> findAll() {
+        // 7주일 이전에 작성된 게시글 삭제
+        findExpiredPosts();
+
+        List<FindDto> findDtos = new ArrayList<>();
+
+        findRepository.findAll().forEach(e -> {
+            FindDto dto = FindDto.builder()
+                    .id(e.getId())
+                    .title(e.getTitle())
+                    .situation(e.getSituation())
+                    .breed(e.getBreed())
+                    .x(e.getGeo() != null ? e.getGeo().getX() : null)
+                    .y(e.getGeo() != null ? e.getGeo().getY() : null)
+                    .location(e.getLocation())
+                    .name(e.getName())
+                    .color(e.getColor())
+                    .gender(e.getGender())
+                    .etc(e.getEtc())
+                    .age(e.getAge())
+                    .neutered(e.getNeutered())
+                    .find_date(e.getFind_date())
+                    .member_id(e.getMember_id())
+                    .shelter_id(e.getShelter_id())
+                    .path_url(e.getPath_url())
+                    .build();
+
+            findDtos.add(dto);
+        });
+
+        return findDtos;
+    }
+
+    // 일주일 이전에 작성된 게시글 삭제
+    public void findExpiredPosts() {
+        // 현재 날짜에서 7일 뺀 날짜
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+
+        // 일주일 전에 작성된 게시글을 가져와서 각각의 id를 deleteFind 메소드로 넘겨서 삭제
+        findRepository.findByModifiedAtBefore(sevenDaysAgo).forEach(e -> {
+            deleteFind(e.getId());
+        });
     }
 
     // s3 매서드
@@ -280,5 +308,6 @@ public class FindService {
     public String getFileNameFromS3Url(String s3Url) {
         return s3Url.substring(s3Url.lastIndexOf('/') + 1);
     }
+
 
 }

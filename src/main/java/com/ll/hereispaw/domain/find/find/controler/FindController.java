@@ -33,12 +33,13 @@ public class FindController {
 
     // 유기견 발견 전체 조회
     @GetMapping
-    public List<FindDto> showFind() {
-        List<FindDto> findDtos = findService.findAll();
+    public List<FindDto> showFindPost() {
 
+        List<FindDto> findDtos = findService.findAll();
         return findDtos;
     }
 
+    // 발견 단건 조회
     @GetMapping("/{postId}")
     public FindDto findPostById(@PathVariable("postId") Long postId) {
         FindDto findDto = findService.findById(postId);
@@ -47,7 +48,7 @@ public class FindController {
     }
 
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String newFind(
+    public String writeFindPost(
             @ModelAttribute FindRequest request,  // Point 필드가 없는 DTO 사용
             @RequestPart("file") MultipartFile file
     ) {
@@ -74,7 +75,7 @@ public class FindController {
     }
 
     @PutMapping("/update/{postId}")
-    public ResponseEntity<String> updateReview(
+    public ResponseEntity<String> updateFindPost(
             @PathVariable("postId") Long postId,
             @ModelAttribute FindRequest request,  // Point 필드가 없는 DTO 사용
             @RequestPart("file") MultipartFile file) {
@@ -95,6 +96,12 @@ public class FindController {
                 state, request.getNeutered(), request.getFind_date(),
                 request.getMember_id(), request.getShelter_id(), file);
         return ResponseEntity.ok("발견 게시글 수정 성공");
+    }
+
+    // 발견 신고 삭제
+    @DeleteMapping("/delete/{postId}")
+    public void deleteFindPost(@PathVariable("postId") Long postId) {
+        findService.deleteFind(postId);
     }
 /*
     @PostMapping("/{postId}/chat")
