@@ -8,6 +8,8 @@ import com.ll.hereispaw.global_msa.member.dto.MemberDto;
 import com.ll.hereispaw.global_msa.webMvc.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,14 +29,15 @@ public class ApiV1FindController {
 
     private final FindService findService;
 
+
     // 유기견 발견 전체 조회
     @GetMapping
     public GlobalResponse<Page<FindResponse>> lists(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-    ) {
-        return GlobalResponse.success(findService.list(page, size));
+        @PageableDefault(size = 10) Pageable pageable) {
+
+        return GlobalResponse.success(findService.list(pageable));
     }
+
 
     @PostMapping(value = "/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GlobalResponse<FindResponse> writeFindPost(
