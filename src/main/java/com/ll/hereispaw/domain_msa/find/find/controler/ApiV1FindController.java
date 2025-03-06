@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1//finding")
+@RequestMapping("/api/v1/finding")
 @RequiredArgsConstructor
 public class ApiV1FindController {
 

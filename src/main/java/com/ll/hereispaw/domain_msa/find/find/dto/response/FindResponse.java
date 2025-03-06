@@ -52,10 +52,10 @@ public class FindResponse {
         this.gender = finding.getGender();
         this.age = finding.getAge();
         this.neutered = finding.getNeutered();
-        this.find_date = finding.getFind_date();
-        this.member_id = finding.getMember_id();
-        this.shelter_id = finding.getShelter_id();
-        this.path_url = finding.getPath_url();
+        this.find_date = finding.getFindDate();
+        this.member_id = finding.getMemberId();
+        this.shelter_id = finding.getShelterId();
+        this.path_url = finding.getPathUrl();
     }
 
 }

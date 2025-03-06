@@ -181,7 +181,7 @@ public class FindService {
     LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
     // 일주일 전에 작성된 게시글을 가져와서 각각의 id를 deleteFind 메소드로 넘겨서 삭제
-    findRepository.findByModifiedAtBefore(sevenDaysAgo).forEach(e -> {
+    findRepository.findByModifiedDateBefore(sevenDaysAgo).forEach(e -> {
       findRepository.deleteById(e.getId());
     });
   }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FindRepository extends JpaRepository<Finding, Long> {
-    List<Finding> findByModifiedAtBefore(LocalDateTime date);
+    List<Finding> findByModifiedDateBefore(LocalDateTime date);
 //    @Query(value = "SELECT f FROM FindPost f " +
 //            "WHERE ST_DWithin(" +
 //            "    ST_Point(CAST(SPLIT_PART(f.geo, ',', 1) AS DOUBLE), " +

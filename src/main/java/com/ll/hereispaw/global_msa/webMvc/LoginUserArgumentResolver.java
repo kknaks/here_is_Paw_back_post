@@ -3,12 +3,9 @@ package com.ll.hereispaw.global_msa.webMvc;
 
 import com.ll.hereispaw.global_msa.member.dto.MemberDto;
 import com.ll.hereispaw.global_msa.member.service.MemberServiceClient;
-import com.ll.hereispaw.global_msa.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -57,9 +54,9 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
             // 필요에 따라 MemberService에서 상세 정보 로드 (선택적)
             // 아래 코드는 상세 정보가 필요할 때 주석 해제
-            // return memberServiceClient.getMemberById(userId);
+             return memberServiceClient.getMemberById(userId);
 
-            return memberDto;
+//            return memberDto;
         } catch (NumberFormatException e) {
             log.error("Invalid userId format: {}", userIdStr, e);
             return null;

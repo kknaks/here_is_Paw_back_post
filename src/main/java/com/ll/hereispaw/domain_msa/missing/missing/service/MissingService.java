@@ -15,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,9 +90,8 @@ public class MissingService {
 //    }
 
     // 전체 조회 페이지 적용
-    public Page<MissingResponse> list(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Missing> missingPage = missingRepository.findAll(pageRequest);
+    public Page<MissingResponse> list(Pageable pageable) {
+        Page<Missing> missingPage = missingRepository.findAll(pageable);
 
         return missingPage.map(MissingResponse::new);
     }
